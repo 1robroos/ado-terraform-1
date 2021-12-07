@@ -3,8 +3,14 @@ set -e
 _LIVE_DIR=${LIVE_DIR:=../../live}
 _BACKEND_TPL=${BACKEND_TPL:=backend.tf.tpl}
 
+echo before if loop
+echo var BRANCH_NAME is $BRANCH_NAME
+echo 
 if [[ -z "$BRANCH_NAME" ]]; then
     _BRANCH_NAME=$(git branch --show-current)
+     echo if loop 
+     echo get git branch
+     git branch --show-current
 else
     _BRANCH_NAME=${BRANCH_NAME}
 fi
