@@ -1,0 +1,31 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+- dev
+
+pool:
+
+  vmImage: 'ubuntu-16.04'
+
+container: ubuntu:16.04 # container to run this job inside of
+
+steps:
+
+- script: printenv44
+
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
+
+jobs:
+- template: 'createsubdir/azure-pipelines.yml'
+# - template: 'django-multi-environment/azure-pipelines.yml'
+# - template: 'flask-basic/azure-pipelines.yml'
+# - template: 'library-basic/azure-pipelines.yml'
+# - template: 'library-flit/azure-pipelines.yml'
