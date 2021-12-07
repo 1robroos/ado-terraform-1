@@ -1,7 +1,7 @@
 # - run:
-#   name: prepare-files-folders
+#   name: prepare-files-backends
 #   command: |
-#     ./scripts/prepare-files-folders.sh
+#     ./scripts/prepare-files-backends.sh
 # name: $(Date:yyyyMMdd)$(Rev:.r)
 # variables:
 #   - name: TF_VAR_app_name
@@ -13,15 +13,15 @@
 #   - name: AWS_REGION
 #     value: "us-east-1"
 jobs:
-  - job: 'preparefolder'
-    displayName: job-prepare-files-folders
+  - job: 'preparebackend'
+    displayName: job-prepare-backend
     pool:
       vmImage: 'ubuntu-latest'
     steps:
     - script: |
-        cd createsubdir/scripts
+        cd preparebackend/scripts
         export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
         export BRANCH_NAME=${{parameters.BRANCH_NAME}}
         echo TF_VAR_app_name=$TF_VAR_app_name
-        ./prepare-files-folders.sh
-      displayName: 'script-prepare-files-folders'    
+        ./prepare-files-backends.sh
+      displayName: 'script-prepare-backend'
