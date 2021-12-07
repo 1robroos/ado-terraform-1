@@ -4,7 +4,7 @@
 #     ./scripts/prepare-files-folders.sh
 
 jobs:
-  - job: 'prepare-files-folders'
+  - job: 'preparefolder'
     displayName: job-prepare-files-foldersg
     pool:
       vmImage: 'Ubuntu-16.04'
