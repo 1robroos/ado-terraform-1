@@ -20,5 +20,7 @@ jobs:
     steps:
     - script: |
         cd createsubdir/scripts
+        export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
+        echo TF_VAR_app_name=$TF_VAR_app_name
         ./prepare-files-folders.sh
       displayName: 'script-prepare-files-folders'    
