@@ -4,6 +4,16 @@
 # https://aka.ms/yaml
 name: $(Date:yyyyMMdd)$(Rev:.r)
 
+
+variables:
+  - name: TF_VAR_app_name
+    value: "kfsolapp"
+  - name: vmImageName
+    value: "ubuntu-latest"
+  - name: TF_VAR_region
+    value: "us-east-1"
+  - name: AWS_REGION
+    value: "us-east-1"
 trigger:
 - dev
 
