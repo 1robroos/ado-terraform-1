@@ -2,14 +2,13 @@
 #   name: prepare-files-folders
 #   command: |
 #     ./scripts/prepare-files-folders.sh
-stages:
-  - stage: subdirs 
-    jobs:
-      - job: 'prepare-files-folders'
-        displayName: job-prepare-files-foldersg
-        pool:
-          vmImage: 'Ubuntu-16.04'
-        steps:
-        - script: |
-            ./scripts/prepare-files-folders.sh        
-          displayName: 'script-prepare-files-folders'    
+
+jobs:
+  - job: 'prepare-files-folders'
+    displayName: job-prepare-files-foldersg
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    steps:
+    - script: |
+        ./scripts/prepare-files-folders.sh        
+      displayName: 'script-prepare-files-folders'    
