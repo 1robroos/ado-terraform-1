@@ -1,17 +1,3 @@
-# - run:
-#   name: prepare-files-backends
-#   command: |
-#     ./scripts/prepare-files-backends.sh
-# name: $(Date:yyyyMMdd)$(Rev:.r)
-# variables:
-#   - name: TF_VAR_app_name
-#     value: "kfsolapp"
-#   - name: vmImageName
-#     value: "ubuntu-latest"
-#   - name: TF_VAR_region
-#     value: "us-east-1"
-#   - name: AWS_REGION
-#     value: "us-east-1"
 jobs:
   - job: 'preparebackend'
     displayName: job-prepare-backend

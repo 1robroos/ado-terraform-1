@@ -24,17 +24,22 @@ pool:
   vmImage: 'ubuntu-latest'
 
 
-jobs:
-- template: 'createsubdir/azure-pipelines.yml'
-  parameters:
-    TF_VAR_app_name: $(TF_VAR_app_name)
-    BRANCH_NAME: $(BRANCH_NAME)
+# jobs:
+# - template: 'createsubdir/azure-pipelines.yml'
+#   parameters:
+#     TF_VAR_app_name: $(TF_VAR_app_name)
+#     BRANCH_NAME: $(BRANCH_NAME)
 
-- template: 'preparebackend/azure-pipelines.yml'
-  parameters:
-    TF_VAR_app_name: $(TF_VAR_app_name)
-    BRANCH_NAME: $(BRANCH_NAME)    
+# - template: 'preparebackend/azure-pipelines.yml'
+#   parameters:
+#     TF_VAR_app_name: $(TF_VAR_app_name)
+#     BRANCH_NAME: $(BRANCH_NAME)    
 # - template: 'django-multi-environment/azure-pipelines.yml'
 # - template: 'flask-basic/azure-pipelines.yml'
 # - template: 'library-basic/azure-pipelines.yml'
 # - template: 'library-flit/azure-pipelines.yml'
+jobs:
+- template: 'preps/azure-pipelines.yml'
+  parameters:
+    TF_VAR_app_name: $(TF_VAR_app_name)
+    BRANCH_NAME: $(BRANCH_NAME)
