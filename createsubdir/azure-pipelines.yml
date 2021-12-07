@@ -1,0 +1,15 @@
+- run:
+  name: prepare-files-folders
+  command: |
+    ./scripts/prepare-files-folders.sh
+
+
+jobs:
+
+  - job: 'prepare-files-folders'
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    steps:
+    - script: |
+        ./scripts/prepare-files-folders.sh        
+      displayName: 'prepare-files-folders'    
