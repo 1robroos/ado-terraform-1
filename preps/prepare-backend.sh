@@ -9,7 +9,7 @@ else
 fi
 
 _BRANCH_NAME=${_BRANCH_NAME//\//-}
-_TEMPLATE_PATH=${TEMPLATE_PATH:="cloudformation/cfn-tfbackend.yml"}
+_TEMPLATE_PATH=${TEMPLATE_PATH:="../cloudformation/cfn-tfbackend.yml"}
 
 if [[ -d "${_LIVE_DIR}" ]]; then
     if [[ ! -f "${_LIVE_DIR}/${_BACKEND_TPL}" ]]; then
@@ -44,7 +44,7 @@ _STACK_NAME="${TF_VAR_app_name}-${_BRANCH_NAME}"
 _STACK_EXISTS=$(trap 'aws cloudformation describe-stacks --stack-name '"$_STACK_NAME"'' EXIT)
 _STACK_EXISTS=$(echo "$_STACK_EXISTS" | grep "CreationTime")
 if [[ -z "$_STACK_EXISTS" ]]; then
-    echo "[LOG] Terraform backend CloudFormation doesn't exist, creating it ..."
+    echo "[LOG] Terraform backend CloudFormation $_STACK_NAME doesn't exist, creating it ..."
     aws cloudformation deploy \
         --stack-name "$_STACK_NAME" \
         --template-file "$_TEMPLATE_PATH" \
