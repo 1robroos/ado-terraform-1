@@ -23,17 +23,6 @@ pool:
 
   vmImage: 'ubuntu-latest'
 
-#container: ubuntu:16.04 # container to run this job inside of
-
-# steps:
-
-# - script: printenv44
-
-
-# - script: |
-#     echo Add other tasks to build, test, and deploy your project.
-#     echo See https://aka.ms/yaml
-#   displayName: 'Run a multi-line script'
 
 jobs:
 - template: 'createsubdir/azure-pipelines.yml'
@@ -41,7 +30,7 @@ jobs:
     TF_VAR_app_name: $(TF_VAR_app_name)
     BRANCH_NAME: $(BRANCH_NAME)
 
-- template: 'createsubdir/azure-pipelines.yml'
+- template: 'preparebackend/azure-pipelines.yml'
   parameters:
     TF_VAR_app_name: $(TF_VAR_app_name)
     BRANCH_NAME: $(BRANCH_NAME)    
