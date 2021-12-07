@@ -26,9 +26,9 @@ jobs:
         ./prepare-files-folders.sh
       displayName: 'script-prepare-files-folders'    
     - script: |
-      cd preparebackend/scripts
-      export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
-      export BRANCH_NAME=${{parameters.BRANCH_NAME}}
-      echo TF_VAR_app_name=$TF_VAR_app_name
-      ./prepare-backend.sh
-    displayName: 'script-prepare-backend'
+        cd preparebackend/scripts
+        export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
+        export BRANCH_NAME=${{parameters.BRANCH_NAME}}
+        echo TF_VAR_app_name=$TF_VAR_app_name
+        ./prepare-backend.sh
+      displayName: 'script-prepare-backend'
