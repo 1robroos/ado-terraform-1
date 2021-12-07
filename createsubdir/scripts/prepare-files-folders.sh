@@ -32,6 +32,7 @@ fi
 
 
 [[ -d "$_BRANCH_NAME" ]] && rm -rf "$_BRANCH_NAME"
+_BRANCH_NAME=dev
 mkdir -p "${_BRANCH_NAME}"/
 echo _BRANCH_NAME dir = ${_BRANCH_NAME}
 cp "${_LIVE_DIR}"/* "${_BRANCH_NAME}"/
