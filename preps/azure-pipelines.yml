@@ -5,14 +5,14 @@ jobs:
       vmImage: 'ubuntu-latest'
     steps:
     - script: |
-        cd scripts
+        cd preps
         export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
         export BRANCH_NAME=${{parameters.BRANCH_NAME}}
         echo TF_VAR_app_name=$TF_VAR_app_name
         ./prepare-files-folders.sh
       displayName: 'script-prepare-files-folders'    
     - script: |
-        cd scripts
+        cd preps
         export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
         export BRANCH_NAME=${{parameters.BRANCH_NAME}}
         echo TF_VAR_app_name=$TF_VAR_app_name
