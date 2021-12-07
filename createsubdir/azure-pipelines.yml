@@ -2,16 +2,16 @@
 #   name: prepare-files-folders
 #   command: |
 #     ./scripts/prepare-files-folders.sh
-name: $(Date:yyyyMMdd)$(Rev:.r)
-variables:
-  - name: TF_VAR_app_name
-    value: "kfsolapp"
-  - name: vmImageName
-    value: "ubuntu-latest"
-  - name: TF_VAR_region
-    value: "us-east-1"
-  - name: AWS_REGION
-    value: "us-east-1"
+# name: $(Date:yyyyMMdd)$(Rev:.r)
+# variables:
+#   - name: TF_VAR_app_name
+#     value: "kfsolapp"
+#   - name: vmImageName
+#     value: "ubuntu-latest"
+#   - name: TF_VAR_region
+#     value: "us-east-1"
+#   - name: AWS_REGION
+#     value: "us-east-1"
 jobs:
   - job: 'preparefolder'
     displayName: job-prepare-files-foldersg
