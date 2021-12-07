@@ -13,15 +13,15 @@ pool:
 
 container: ubuntu:16.04 # container to run this job inside of
 
-steps:
+# steps:
 
-- script: printenv44
+# - script: printenv44
 
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+# - script: |
+#     echo Add other tasks to build, test, and deploy your project.
+#     echo See https://aka.ms/yaml
+#   displayName: 'Run a multi-line script'
 
 jobs:
 - template: 'createsubdir/azure-pipelines.yml'
