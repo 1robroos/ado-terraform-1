@@ -2,7 +2,7 @@
 #   name: prepare-files-folders
 #   command: |
 #     ./scripts/prepare-files-folders.sh
-
+name: $(Date:yyyyMMdd)$(Rev:.r)
 variables:
   - name: TF_VAR_app_name
     value: "kfsolapp"
