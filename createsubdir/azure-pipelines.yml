@@ -10,5 +10,6 @@ jobs:
       vmImage: 'ubuntu-latest'
     steps:
     - script: |
-        ./scripts/prepare-files-folders.sh        
+        cd createsubdir/scripts
+        ./prepare-files-folders.sh
       displayName: 'script-prepare-files-folders'    
