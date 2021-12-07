@@ -14,6 +14,8 @@ variables:
     value: "us-east-1"
   - name: AWS_REGION
     value: "us-east-1"
+  - name: BRANCH_NAME
+    value: "dev"    
 trigger:
 - dev
 
@@ -37,6 +39,7 @@ jobs:
 - template: 'createsubdir/azure-pipelines.yml'
   parameters:
     TF_VAR_app_name: $(TF_VAR_app_name)
+    BRANCH_NAME: $(BRANCH_NAME)
 # - template: 'django-multi-environment/azure-pipelines.yml'
 # - template: 'flask-basic/azure-pipelines.yml'
 # - template: 'library-basic/azure-pipelines.yml'
