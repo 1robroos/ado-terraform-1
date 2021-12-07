@@ -11,7 +11,7 @@ pool:
 
   vmImage: 'ubuntu-16.04'
 
-container: ubuntu:16.04 # container to run this job inside of
+#container: ubuntu:16.04 # container to run this job inside of
 
 # steps:
 
