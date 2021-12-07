@@ -6,6 +6,9 @@ _BACKEND_TPL=${BACKEND_TPL:=backend.tf.tpl}
 echo before if loop
 echo var BRANCH_NAME is $BRANCH_NAME
 echo 
+echo show git status 
+git status
+echo "..........................."
 if [[ -z "$BRANCH_NAME" ]]; then
     _BRANCH_NAME=$(git branch --show-current)
      echo if loop 
