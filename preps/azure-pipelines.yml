@@ -17,7 +17,7 @@ jobs:
     #     export BRANCH_NAME=${{parameters.BRANCH_NAME}}
     #     echo TF_VAR_app_name=$TF_VAR_app_name
     #     ./prepare-backend.sh
-    #   displayName: 'script-prepare-backend'
+    #   displayName:  'script-prepare-backend'
     - task: AWSShellScript@1
       inputs:
         awsCredentials: 'aws-AzureDevopsiamuser'
