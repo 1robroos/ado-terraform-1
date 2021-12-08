@@ -11,10 +11,23 @@ jobs:
         echo TF_VAR_app_name=$TF_VAR_app_name
         ./prepare-files-folders.sh
       displayName: 'script-prepare-files-folders'    
-    - script: |
-        cd preps
-        export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
-        export BRANCH_NAME=${{parameters.BRANCH_NAME}}
-        echo TF_VAR_app_name=$TF_VAR_app_name
-        ./prepare-backend.sh
-      displayName: 'script-prepare-backend'
+    # - script: |
+    #     cd preps
+    #     export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
+    #     export BRANCH_NAME=${{parameters.BRANCH_NAME}}
+    #     echo TF_VAR_app_name=$TF_VAR_app_name
+    #     ./prepare-backend.sh
+    #   displayName: 'script-prepare-backend'
+    - task: AWSShellScript@1
+      inputs:
+        awsCredentials: 'AWSTerraform-us-east-1-AzureDevOps_Terraform_test'
+        regionName: 'us-east-1'
+        scriptType: 'inline'
+        # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
+        inlineScript: |
+          cd preps
+          export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
+          export BRANCH_NAME=${{parameters.BRANCH_NAME}}
+          echo TF_VAR_app_name=$TF_VAR_app_name
+          ./prepare-backend.sh
+      name: script-prepare-backend 
