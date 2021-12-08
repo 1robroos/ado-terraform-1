@@ -30,4 +30,4 @@ jobs:
           export BRANCH_NAME=${{parameters.BRANCH_NAME}}
           echo TF_VAR_app_name=$TF_VAR_app_name
           ./prepare-backend.sh
-      name: script-prepare-backend 
+      name: script_prepare_backend 
