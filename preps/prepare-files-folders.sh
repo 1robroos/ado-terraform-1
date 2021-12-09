@@ -16,9 +16,9 @@ echo "..........................."
 
 echo 
 echo show git branch but test ADO predefined variable
-echo 1 $(Build.SourceBranchName)
-echo 2 $BUILD_SOURCEBRANCHNAME
-echo 3 $BRANCH_NAME
+echo 1 THis gives an error $(Build.SourceBranchName)
+echo 2 Predefined variable BUILD_SOURCEBRANCHNAME has value  $BUILD_SOURCEBRANCHNAME
+echo 3 Pass-through variable BRANCH_NAME has value $BRANCH_NAME
 echo "..........................."
 
 if [[ -z "$BRANCH_NAME" ]]; then
