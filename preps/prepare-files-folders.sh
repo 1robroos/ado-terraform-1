@@ -14,6 +14,13 @@ echo show git branch
 git branch
 echo "..........................."
 
+echo 
+echo show git branch but test ADO predefined variable
+echo 1 $(Build.SourceBranchName)
+echo 2 $BUILD_SOURCEBRANCHNAME
+echo 3 $BRANCH_NAME
+echo "..........................."
+
 if [[ -z "$BRANCH_NAME" ]]; then
     _BRANCH_NAME=$(git branch --show-current)
      echo if loop 
@@ -37,7 +44,6 @@ fi
 
 
 [[ -d "$_BRANCH_NAME" ]] && rm -rf "$_BRANCH_NAME"
-#_BRANCH_NAME=dev
 mkdir -p "${_BRANCH_NAME}"/
 echo _BRANCH_NAME dir = ${_BRANCH_NAME}
 cp "${_LIVE_DIR}"/* "${_BRANCH_NAME}"/
