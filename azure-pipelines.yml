@@ -15,9 +15,8 @@ variables:
   - name: AWS_REGION
     value: "us-east-1"
   - name: BRANCH_NAME
-    value: "dev"
-  - name: ADOBRANCHNAME
     value: $(Build.SourceBranchName)
+
 trigger:
 - dev
 
@@ -25,17 +24,14 @@ pool:
 
   vmImage: 'ubuntu-latest'
 
-# jobs:
-# - template: 'preps/azure-pipelines.yml'
-#   parameters:
-#     TF_VAR_app_name: $(TF_VAR_app_name)
-#     BRANCH_NAME: $(BRANCH_NAME)
-
-
 steps:
-  # -
-  # - Prerequisites
-  # -
   - script: |
-      echo branch name is $ADOBRANCHNAME
-    displayName: adobranchname
+      echo branch name is $BRANCH_NAME and is derived from Azure Devops Predefine Variable
+    displayName: branchname
+
+    
+jobs:
+- template: 'preps/azure-pipelines.yml'
+  parameters:
+    TF_VAR_app_name: $(TF_VAR_app_name)
+    BRANCH_NAME: $(BRANCH_NAME)
