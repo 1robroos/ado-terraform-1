@@ -17,7 +17,7 @@ variables:
   - name: BRANCH_NAME
     value: "dev"
   - name: ADOBRANCHNAME
-    value: Build.SourceBranchName
+    value: $(Build.SourceBranchName)
 trigger:
 - dev
 
