@@ -4,6 +4,12 @@
 # https://aka.ms/yaml
 name: $(Date:yyyyMMdd)$(Rev:.r)
 
+parameters:
+  - name: name  # defaults for any parameters that aren't specified
+    default: ''
+  - name: vmImage
+    default: ''
+  
 
 variables:
   - name: TF_VAR_app_name
@@ -24,13 +30,20 @@ pool:
 
   vmImage: 'ubuntu-latest'
 
-steps:
-  - script: |
-      echo branch name is $BRANCH_NAME and is derived from Azure Devops Predefine Variable
-    displayName: branchname
+# steps:
+#   - script: |
+#       echo branch name is $BRANCH_NAME and is derived from Azure Devops Predefine Variable
+#     displayName: branchname
 
     
 jobs:
+- job: DoIt
+  steps:
+  - script: echo npm install
+  - script: echo npm test  
+  - bash: |  
+      echo branch name is $BRANCH_NAME and is derived from Azure Devops Predefine Variable
+  displayName: Show_branch_name
 - template: 'preps/azure-pipelines.yml'
   parameters:
     TF_VAR_app_name: $(TF_VAR_app_name)
