@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 set -o pipefail
-_LIVE_DIR=${LIVE_DIR:="live"}
+_LIVE_DIR=${LIVE_DIR:="../live"}
 _BACKEND_TPL=${BACKEND_TPL:="backend.tf.tpl"}
 _TERRAFORM_APPLY=${TERRAFORM_APPLY:="false"}
 
