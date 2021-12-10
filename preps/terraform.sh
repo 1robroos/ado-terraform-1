@@ -44,23 +44,23 @@ terraform get
 terraform validate
 terraform plan -out=plan.tfout -no-color -var environment="${_BRANCH_NAME}" 2>&1 | tee plan.md
 no_changes=$(awk '/^No changes/' plan.md)
-if [[ -z "$no_changes" ]]; then
-    delimiter=$(awk '/^-----*$/{ print NR; exit }' plan.md)
-    sed -i.bak -n ''$((delimiter+1))',$ p' plan.md
-    delimiter=$(awk '/^-----*$/{ print NR; exit }' plan.md)
-    sed -i.bak '1,'$((delimiter-1))'!d' plan.md
-    sed -i.bak 's~^  ~~g' plan.md
-    my_plan=$(awk '/^Plan:.*$/' plan.md)
-fi
+# if [[ -z "$no_changes" ]]; then
+#     delimiter=$(awk '/^-----*$/{ print NR; exit }' plan.md)
+#     sed -i.bak -n ''$((delimiter+1))',$ p' plan.md
+#     delimiter=$(awk '/^-----*$/{ print NR; exit }' plan.md)
+#     sed -i.bak '1,'$((delimiter-1))'!d' plan.md
+#     sed -i.bak 's~^  ~~g' plan.md
+#     my_plan=$(awk '/^Plan:.*$/' plan.md)
+# fi
 
-if [[ -n $my_plan && -z $no_changes ]]; then
-    sed -i.bak "1s/^/### $my_plan/" plan.md
-    sed -i.bak $'2s/^/\\`\\`\\`diff\\\n/' plan.md
-    echo "\`\`\`" >> plan.md    
-else
-    echo "### No changes to be made" > plan.md
-fi
+# if [[ -n $my_plan && -z $no_changes ]]; then
+#     sed -i.bak "1s/^/### $my_plan/" plan.md
+#     sed -i.bak $'2s/^/\\`\\`\\`diff\\\n/' plan.md
+#     echo "\`\`\`" >> plan.md    
+# else
+#     echo "### No changes to be made" > plan.md
+# fi
 
-if [[ "$_TERRAFORM_APPLY" = "true" && -n $my_plan && -z $no_changes ]]; then
-    terraform apply -auto-approve plan.tfout 
-fi
+# if [[ "$_TERRAFORM_APPLY" = "true" && -n $my_plan && -z $no_changes ]]; then
+#     terraform apply -auto-approve plan.tfout 
+# fi
