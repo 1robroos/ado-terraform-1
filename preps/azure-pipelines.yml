@@ -31,7 +31,7 @@ jobs:
           echo TF_VAR_app_name=$TF_VAR_app_name
           ./prepare-backend.sh
       name: script_prepare_backend 
-    - task: AWSShellScript@2
+    - task: AWSShellScript2@1
       inputs:
         awsCredentials: 'aws-AzureDevopsiamuser'
         regionName: 'us-east-1'
