@@ -52,3 +52,10 @@ if [[ -z "$_STACK_EXISTS" ]]; then
 else
     echo "[LOG] Terraform backend CloudFormation stack exists, do nothing"
 fi
+
+echo "Debug show pwd is $PWD"
+echo "Debug Show ls -l"
+ls -l
+echo 
+echo "Debug show ls -l dev"
+ls -l dev   
