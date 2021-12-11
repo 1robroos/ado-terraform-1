@@ -134,7 +134,7 @@ jobs:
           echo pwd is $PWD
           echo test >>testfile.txt
           ls -l testfile.txt
-          terraform plan -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
+          bash terraform plan -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
           EXCODE=$?
           echo excode=$EXCODE
           ls -l
