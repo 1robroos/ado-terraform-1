@@ -133,7 +133,7 @@ jobs:
           echo pwd is $PWD
           echo test >>testfile.txt
           ls -l testfile.txt
-          terraform plan
+          terraform plan -var environment="${_BRANCH_NAME}" -input=false
           ls -l
           cat backend.tf
           # OUT=$?
