@@ -82,6 +82,7 @@ jobs:
           #  cat ${_LIVE_DIR}/${_BACKEND_TPL}
            echo
            echo "Show PWD $PWD"
+           
            echo "show ls from $PWD"
            ls -l 
           _TERRAFORM_APPLY=${TERRAFORM_APPLY:="false"}
