@@ -54,3 +54,4 @@ mv "${_BRANCH_NAME}/${_BACKEND_TPL}" "${_BRANCH_NAME}"/backend.tf
 echo "[LOG] Prepared files and folders for the environment - $_BRANCH_NAME"
 ls -lah "$_BRANCH_NAME"
 cat "${_BRANCH_NAME}"/backend.tf
+echo "SHow PWD $PWD"
