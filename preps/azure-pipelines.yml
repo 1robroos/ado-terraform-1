@@ -79,7 +79,7 @@ jobs:
           _LIVE_DIR=${LIVE_DIR:="../live"}
           _BACKEND_TPL=${BACKEND_TPL:="backend.tf.tpl"}
            echo "Show backend file:"
-           ${_LIVE_DIR}/${_BACKEND_TPL}
+           cat ${_LIVE_DIR}/${_BACKEND_TPL}
            echo
 
           _TERRAFORM_APPLY=${TERRAFORM_APPLY:="false"}
