@@ -122,7 +122,8 @@ jobs:
           terraform init
           echo "END TERRAFORM INIT"
           echo "STARTING OUTPUT VARIABLE"
-          OUTPUT=$(terraform plan -out="./out_plan_file" -var 'environment="${_BRANCH_NAME}"' -input=false -detailed-exitcode)
+          #OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
+          terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
           # OUT=$?
           # echo "the var OUT is $OUT"
           # #OUT=2 # force it for testing
