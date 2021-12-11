@@ -55,3 +55,6 @@ echo "[LOG] Prepared files and folders for the environment - $_BRANCH_NAME"
 ls -lah "$_BRANCH_NAME"
 cat "${_BRANCH_NAME}"/backend.tf
 echo "SHow PWD $PWD"
+cd ${_BRANCH_NAME}
+echo Now changed the branch subdir $PWD"
+
