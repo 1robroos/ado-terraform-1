@@ -125,13 +125,14 @@ jobs:
           echo "STARTING TERRAFORM INIT"
           terraform init
           echo "END TERRAFORM INIT"
-          echo "STARTING OUTPUT VARIABLE"
+          #echo "STARTING OUTPUT VARIABLE"
+          echo
           #OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
           #terraform state list
           #terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
           echo pwd is $PWD
           echo test >>testfile.txt
-          ls -l test
+          ls -l testfile.txt
           terraform plan
           ls -l
           cat backend.tf
