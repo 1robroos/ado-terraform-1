@@ -127,8 +127,8 @@ jobs:
           echo "END TERRAFORM INIT"
           echo "STARTING OUTPUT VARIABLE"
           #OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
-          terraform state list
-          #terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
+          #terraform state list
+          terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
           ls -l
           cat backend.tf
           # OUT=$?
