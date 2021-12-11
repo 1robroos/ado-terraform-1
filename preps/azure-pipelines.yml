@@ -68,7 +68,7 @@ jobs:
         scriptType: 'inline'
         # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
         inlineScript: |
-          cd preps
+          #cd preps
           export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
           export BRANCH_NAME=${{parameters.BRANCH_NAME}}
           export TF_VAR_region=${{parameters.TF_VAR_region}}
@@ -81,7 +81,7 @@ jobs:
            echo "Show backend file:"
            cat ${_LIVE_DIR}/${_BACKEND_TPL}
            echo
-
+           echo "Show PWD $PWD"
           _TERRAFORM_APPLY=${TERRAFORM_APPLY:="false"}
 
           if [[ -n "$BRANCH_NAME" ]]; then
@@ -91,7 +91,8 @@ jobs:
           fi
 
           _BRANCH_NAME=${_BRANCH_NAME//\//-}
-
+          echo "Show _BRANCH_NAME $_BRANCH_NAME"
+          
           if [[ ! -d "$_BRANCH_NAME" ]]; then
               echo "[ERROR] Branch directory doesn't exist - '$_BRANCH_NAME'"
               exit 1
@@ -118,6 +119,7 @@ jobs:
           fi
 
           cd "${_BRANCH_NAME}"/ || exit
+
           echo "STARTING TERRAFORM INIT"
           terraform init
           echo "END TERRAFORM INIT"
