@@ -82,7 +82,7 @@ jobs:
           #  cat ${_LIVE_DIR}/${_BACKEND_TPL}
            echo
            echo "Show PWD $PWD"
-           
+
            echo "show ls from $PWD"
            ls -l 
           _TERRAFORM_APPLY=${TERRAFORM_APPLY:="false"}
@@ -134,7 +134,9 @@ jobs:
           echo pwd is $PWD
           echo test >>testfile.txt
           ls -l testfile.txt
-          terraform plan -var environment="${_BRANCH_NAME}" -input=false
+          terraform plan -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
+          EXCODE=$?
+          echo excode=$EXCODE
           ls -l
           cat backend.tf
           # OUT=$?
