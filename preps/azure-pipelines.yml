@@ -76,10 +76,10 @@ jobs:
           set -x  # debug
           set -e
           set -o pipefail
-          _LIVE_DIR=${LIVE_DIR:="../live"}
-          _BACKEND_TPL=${BACKEND_TPL:="backend.tf.tpl"}
-           echo "Show backend file:"
-           cat ${_LIVE_DIR}/${_BACKEND_TPL}
+          LIVE_DIR=${LIVE_DIR:="./live"}
+          # _BACKEND_TPL=${BACKEND_TPL:="backend.tf.tpl"}
+          #  echo "Show backend file:"
+          #  cat ${_LIVE_DIR}/${_BACKEND_TPL}
            echo
            echo "Show PWD $PWD"
           _TERRAFORM_APPLY=${TERRAFORM_APPLY:="false"}
@@ -92,7 +92,7 @@ jobs:
 
           _BRANCH_NAME=${_BRANCH_NAME//\//-}
           echo "Show _BRANCH_NAME $_BRANCH_NAME"
-          
+
           if [[ ! -d "$_BRANCH_NAME" ]]; then
               echo "[ERROR] Branch directory doesn't exist - '$_BRANCH_NAME'"
               exit 1
@@ -119,13 +119,13 @@ jobs:
           fi
 
           cd "${_BRANCH_NAME}"/ || exit
-
+          echo "Show PWD again $PWD"
           echo "STARTING TERRAFORM INIT"
           terraform init
           echo "END TERRAFORM INIT"
           echo "STARTING OUTPUT VARIABLE"
           #OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
-          #terraform state list
+          terraform state list
           #terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
           ls -l
           cat backend.tf
