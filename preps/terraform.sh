@@ -71,30 +71,21 @@ cd "${_BRANCH_NAME}"/ || exit
 terraform init
 # terraform plan -out=plan.tfout -no-color -var environment="${_BRANCH_NAME}" 2>&1 | tee plan.md
 
-OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME} -input=false -detailed-exitcode)
+OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
     OUT=$?
     echo "the var OUT is $OUT"
     #OUT=2 # force it for testing
     if [ $OUT -eq 0 ];then
-        #echo '##vso[task.setvariable variable=terraform_plan_exitcode;isOutput=true]0'
         echo "No changes. Infrastructure is up-to-date!"
         sleep 1
     elif [ $OUT -eq 1 ];then
-        echo "##vso[task.setvariable variable=terraform_plan_exitcode;isOutput=true]1"
         echo "Terraform planned has failed!"
         sleep 1
         exit 1
     elif [ $OUT -eq 2 ];then
-        export terraform_plan_exitcode="2"
-        echo "##vso[task.setvariable variable=terraform_plan_exitcode;isOutput=true]$terraform_plan_exitcode"
         echo "Changes have been noticed!"
         sleep 1
         terraform show ./out_plan_file
-        # - task: PublishPipelineArtifact@1
-        #   inputs:
-        #     targetPath: '$(Pipeline.Workspace)'
-        #     artifact: 'terraformplanoutput'
-        #     publishLocation: 'pipeline'
     else
         echo "Terraform planned has failed!"
         exit 1
