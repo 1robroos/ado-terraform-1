@@ -128,7 +128,11 @@ jobs:
           echo "STARTING OUTPUT VARIABLE"
           #OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
           #terraform state list
-          terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
+          #terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
+          echo pwd is $PWD
+          echo test >>testfile.txt
+          ls -l test
+          terraform plan
           ls -l
           cat backend.tf
           # OUT=$?
