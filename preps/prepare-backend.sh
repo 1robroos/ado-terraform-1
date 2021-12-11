@@ -1,5 +1,5 @@
 #!/bin/bash
-_LIVE_DIR=${LIVE_DIR:=../live}
+_LIVE_DIR=${LIVE_DIR:=live}
 _BACKEND_TPL=${BACKEND_TPL:=backend.tf.tpl}
 
 if [[ -z "$BRANCH_NAME" ]]; then

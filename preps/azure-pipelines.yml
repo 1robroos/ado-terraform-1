@@ -5,11 +5,11 @@ jobs:
       vmImage: 'ubuntu-latest'
     steps:
     - script: |
-        cd preps
+        #cd preps
         export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
         export BRANCH_NAME=${{parameters.BRANCH_NAME}}
         echo TF_VAR_app_name=$TF_VAR_app_name
-        ./prepare-files-folders.sh
+        preps/prepare-files-folders.sh
       displayName: 'script-prepare-files-folders'    
     # - script: |
     #     cd preps
@@ -25,11 +25,11 @@ jobs:
         scriptType: 'inline'
         # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
         inlineScript: |
-          cd preps
+          #cd preps
           export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
           export BRANCH_NAME=${{parameters.BRANCH_NAME}}
           echo TF_VAR_app_name=$TF_VAR_app_name
-          ./prepare-backend.sh
+          preps/prepare-backend.sh
       name: script_prepare_backend 
     # - task: AWSShellScript@1
     #   inputs:
@@ -76,7 +76,7 @@ jobs:
           set -x  # debug
           set -e
           set -o pipefail
-          LIVE_DIR=${LIVE_DIR:="./live"}
+          LIVE_DIR=${LIVE_DIR:="live"}
           # _BACKEND_TPL=${BACKEND_TPL:="backend.tf.tpl"}
           #  echo "Show backend file:"
           #  cat ${_LIVE_DIR}/${_BACKEND_TPL}
@@ -121,7 +121,7 @@ jobs:
           fi
 
           cd "${_BRANCH_NAME}"/ || exit
-          echo "Show PWD again $PWD"
+          echo "Show PWD again $PWD should be in subdir for branch"
           echo "STARTING TERRAFORM INIT"
           terraform init
           echo "END TERRAFORM INIT"

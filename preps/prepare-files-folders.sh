@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-_LIVE_DIR=${LIVE_DIR:=../live}
+_LIVE_DIR=${LIVE_DIR:=live}
 _BACKEND_TPL=${BACKEND_TPL:=backend.tf.tpl}
 
 # echo before if loop
@@ -56,5 +56,5 @@ ls -lah "$_BRANCH_NAME"
 cat "${_BRANCH_NAME}"/backend.tf
 echo "SHow PWD $PWD"
 cd ${_BRANCH_NAME}
-echo "Now changed the branch subdir $PWD"
+echo "Now changed the branch subdir $PWD"  #/home/vsts/work/1/s/preps/dev
 
