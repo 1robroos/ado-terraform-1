@@ -68,7 +68,7 @@ cd "${_BRANCH_NAME}"/ || exit
 # fi
 #
 # copied from azure-pipelines.yml https://github.com/1robroos/AzureDevOps_Terraform_AwsSeed/blob/d8cdfeca7b44727214c36e26d6122cbcb826e322/azure-pipelines.yml
-
+terraform init
 OUTPUT=$(terraform plan -out="./out_plan_file" -input=false -detailed-exitcode)
     OUT=$?
     echo "the var OUT is $OUT"
