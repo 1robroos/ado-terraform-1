@@ -126,6 +126,7 @@ jobs:
           #terraform state list
           #terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
           ls -l
+          cat backend.tf
           # OUT=$?
           # echo "the var OUT is $OUT"
           # #OUT=2 # force it for testing
