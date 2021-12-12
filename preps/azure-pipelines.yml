@@ -25,8 +25,6 @@ jobs:
         scriptType: 'inline'
         # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
         inlineScript: |
-        
-          #cd preps
           export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
           export BRANCH_NAME=${{parameters.BRANCH_NAME}}
           echo TF_VAR_app_name=$TF_VAR_app_name
@@ -48,20 +46,6 @@ jobs:
     #       # docker run --rm -w="/code" -e TF_VAR_app_name -e TF_VAR_region -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e CIRCLE_BRANCH -v "${HOME}"/project/:/code/ unfor19/terraform-alpine:$TERRAFORM_VERSION /code/scripts/terraform-apply.sh
     #   name: terraform_apply
 
-    # - task: AWSShellScript@1
-    #   inputs:
-    #     awsCredentials: 'aws-AzureDevopsiamuser'
-    #     regionName: 'us-east-1'
-    #     scriptType: 'inline'
-    #     # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
-    #     inlineScript: |
-    #       cd preps
-    #       export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
-    #       export BRANCH_NAME=${{parameters.BRANCH_NAME}}
-    #       export TF_VAR_region=${{parameters.TF_VAR_region}}
-    #       export TERRAFORM_VERSION="1.0.5"
-    #       terraform init
-    #   name: terraform_init
     - task: AWSShellScript@1
       inputs:
         awsCredentials: 'aws-AzureDevopsiamuser'
@@ -69,7 +53,20 @@ jobs:
         scriptType: 'inline'
         # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
         inlineScript: |
-          #cd preps
+          cd preps
+          export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
+          export BRANCH_NAME=${{parameters.BRANCH_NAME}}
+          export TF_VAR_region=${{parameters.TF_VAR_region}}
+          export TERRAFORM_VERSION="1.0.5"
+          terraform init
+      name: terraform_init
+    - task: AWSShellScript@1
+      inputs:
+        awsCredentials: 'aws-AzureDevopsiamuser'
+        regionName: 'us-east-1'
+        scriptType: 'inline'
+        # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
+        inlineScript: |
           export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
           export BRANCH_NAME=${{parameters.BRANCH_NAME}}
           export TF_VAR_region=${{parameters.TF_VAR_region}}
@@ -124,9 +121,9 @@ jobs:
 
           cd "${_BRANCH_NAME}"/ || exit
           echo "Show PWD again $PWD should be in subdir for branch"
-          echo "STARTING TERRAFORM INIT"
-          terraform init
-          echo "END TERRAFORM INIT"
+          # echo "STARTING TERRAFORM INIT"
+          # terraform init
+          # echo "END TERRAFORM INIT"
           #echo "STARTING OUTPUT VARIABLE"
           echo
           #OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
