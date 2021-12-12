@@ -50,7 +50,7 @@ jobs:
     BRANCH_NAME: $(BRANCH_NAME)
     TF_VAR_region: $(TF_VAR_region)
     
-- job: terraform
+- job: argumenttest
   steps:
   - task: AWSShellScript@1
     inputs:
@@ -61,7 +61,7 @@ jobs:
       inlineScript: 'echo args are $1 $2 $3'
     name: argumenttest
 
-- job: terraformplan
+- job: terraforminit
   steps:
   - task: AWSShellScript@1
     inputs:
@@ -75,7 +75,11 @@ jobs:
         export ssF_VAR_app_name=$1
         export TF_VAR_region=$2
         export BRANCH_NAME=$3
-    name: terraformplan
+        export TERRAFORM_VERSION="1.0.5"
+        cd "${BRANCH_NAME}"/ || exit
+        echo "STARTING TERRAFORM INIT"
+        terraform init
+    name: terraforminit
   
   # - task: AWSShellScript@1  #https://docs.aws.amazon.com/vsts/latest/userguide/awsshell.html
   #   inputs:
