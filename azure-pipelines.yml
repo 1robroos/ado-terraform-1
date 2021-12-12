@@ -58,9 +58,9 @@ jobs:
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
       regionName: 'us-east-1'
-      arguments: '$(TF_VAR_app_name)'
+      arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
       scriptType: 'inline'
-      inlineScript: 'echo arg is $1'
+      inlineScript: 'echo arg is $1 $2 $3'
 
   # - task: AWSShellScript@1  #https://docs.aws.amazon.com/vsts/latest/userguide/awsshell.html
   #   inputs:
