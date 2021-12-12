@@ -62,6 +62,7 @@ jobs:
     name: argumenttest
 
 - job: terraforminit
+  dependsOn: preparefolder
   steps:
   - task: AWSShellScript@1
     inputs:
