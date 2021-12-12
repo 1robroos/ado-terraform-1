@@ -69,7 +69,7 @@ jobs:
       # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
       inlineScript: |
         echo args are $1 $2 $3
-        export TF_VAR_app_name=$1
+        export ssTF_VAR_app_name=$1
         export TF_VAR_region=$2
         export BRANCH_NAME=$3
         # export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
@@ -81,18 +81,18 @@ jobs:
         # echo "STARTING TERRAFORM INIT"
         terraform init
     name: terraform_init
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: 'us-east-1'
-      arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
-      scriptType: 'inline'
-      # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
-      inlineScript: |
-        echo args are $1 $2 $3
-        export TF_VAR_app_name=$1
-        export TF_VAR_region=$2
-        export BRANCH_NAME=$3
+  # - task: AWSShellScript@1
+  #   inputs:
+  #     awsCredentials: 'aws-AzureDevopsiamuser'
+  #     regionName: 'us-east-1'
+  #     arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
+  #     scriptType: 'inline'
+  #     # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
+  #     inlineScript: |
+  #       echo args are $1 $2 $3
+  #       export TF_VAR_app_name=$1
+  #       export TF_VAR_region=$2
+  #       export BRANCH_NAME=$3
   #       # export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
   #       #   export BRANCH_NAME=${{parameters.BRANCH_NAME}}
   #       #   export TF_VAR_region=${{parameters.TF_VAR_region}}
@@ -177,4 +177,4 @@ jobs:
   #                 echo "Terraform planned has failed!"
   #                 exit 1
   #             fi
-    name: terraform_plan
+    # name: terraform_plan
