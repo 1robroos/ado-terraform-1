@@ -77,8 +77,9 @@ jobs:
         export BRANCH_NAME=$3
         export TERRAFORM_VERSION="1.0.5"
         cd "${BRANCH_NAME}"/ || exit
+        echo pwd is $PWD
         echo "STARTING TERRAFORM INIT"
-        terraform init
+        #terraform init
     name: terraforminit
   
   # - task: AWSShellScript@1  #https://docs.aws.amazon.com/vsts/latest/userguide/awsshell.html
