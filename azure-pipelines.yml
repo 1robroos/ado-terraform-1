@@ -91,7 +91,10 @@ jobs:
       scriptType: 'inline'
       # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
       inlineScript: |
-        echo args are $1 $2 $3 $(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)
+        echo args are $1 $2 $3
+        export TF_VAR_app_name=$1
+        export TF_VAR_region=$2
+        export BRANCH_NAME=$3
         # export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
         #   export BRANCH_NAME=${{parameters.BRANCH_NAME}}
         #   export TF_VAR_region=${{parameters.TF_VAR_region}}
@@ -159,7 +162,7 @@ jobs:
         # ls -l testfile.txt
         OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
               OUT=$?
-              echo "the var OUT is $OUT"
+              echo "the terraform plan exitcode is $OUT"
               #OUT=2 # force it for testing
               if [ $OUT -eq 0 ];then
                   echo "No changes. Infrastructure is up-to-date!"
