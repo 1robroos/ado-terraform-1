@@ -132,9 +132,9 @@ jobs:
           #terraform state list
           #terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
           echo pwd is $PWD
-          echo test >>testfile.txt
-          ls -l testfile.txt
-          OUTPUT=$(terraform plan -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
+          # echo test >>testfile.txt
+          # ls -l testfile.txt
+          OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
                 OUT=$?
                 echo "the var OUT is $OUT"
                 #OUT=2 # force it for testing
