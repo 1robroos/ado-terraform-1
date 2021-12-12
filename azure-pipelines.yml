@@ -50,9 +50,19 @@ jobs:
     BRANCH_NAME: $(BRANCH_NAME)
     TF_VAR_region: $(TF_VAR_region)
 
+
+    
 - job: terraform
   steps:
   - task: AWSShellScript@1
+    inputs:
+      awsCredentials: 'aws-AzureDevopsiamuser'
+      regionName: 'us-east-1'
+      arguments: '$(TF_VAR_app_name)'
+      scriptType: 'inline'
+      inlineScript: 'echo arg is $1'
+
+  - task: AWSShellScript@1  #https://docs.aws.amazon.com/vsts/latest/userguide/awsshell.html
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
       regionName: 'us-east-1'
