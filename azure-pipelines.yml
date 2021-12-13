@@ -70,13 +70,112 @@ steps:
         echo pwd is $PWD        
         echo "STARTING TERRAFORM INIT"
         terraform init
-    name: terraforminit  
+    name: terraforminit
+
+
   # - template: ADO/DEV-plan.yml@Templates
   
   # - template: ADO/Publish-Terraform-Artifact.yml@Templates
   
   # - template: ADO/Publish-Plan-To-Wiki.yml@Templates
 
+  - task: AWSShellScript@1
+    inputs:
+      awsCredentials: 'aws-AzureDevopsiamuser'
+      regionName: 'us-east-1'
+      arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
+      scriptType: 'inline'
+      # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
+      inlineScript: |
+        echo args are $1 $2 $3
+        export TF_VAR_app_name=$1
+        export TF_VAR_region=$2
+        export BRANCH_NAME=$3
+        # export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
+        #   export BRANCH_NAME=${{parameters.BRANCH_NAME}}
+        #   export TF_VAR_region=${{parameters.TF_VAR_region}}
+        export TERRAFORM_VERSION="1.0.5"
+        # set -x  # debug
+        # set -e   ==>  -e  Exit immediately if a command exits with a non-zero status.   Don't use it here because terraform plan is used with exit codes.
+        #set -o pipefail # Without pipefail, the return value of a pipeline is the exit status of the last command.
+        LIVE_DIR=${LIVE_DIR:="live"}
+        # _BACKEND_TPL=${BACKEND_TPL:="backend.tf.tpl"}
+        #  echo "Show backend file:"
+        #  cat ${_LIVE_DIR}/${_BACKEND_TPL}
+          echo
+          echo "Show PWD $PWD"
+
+          echo "show ls from $PWD"
+          ls -l 
+        _TERRAFORM_APPLY=${TERRAFORM_APPLY:="false"}
+
+        if [[ -n "$BRANCH_NAME" ]]; then
+            _BRANCH_NAME=${BRANCH_NAME}
+        else
+            _BRANCH_NAME=$(git branch --show-current)
+        fi
+
+        _BRANCH_NAME=${_BRANCH_NAME//\//-}
+        echo "Show _BRANCH_NAME $_BRANCH_NAME"
+
+        if [[ ! -d "$_BRANCH_NAME" ]]; then
+            echo "[ERROR] Branch directory doesn't exist - '$_BRANCH_NAME'"
+            exit 1
+        fi
+
+        # if [[ -d "$_LIVE_DIR" ]]; then
+        #     if [[ ! -f "${_LIVE_DIR}/${_BACKEND_TPL}" ]]; then
+        #         echo "[ERROR] The file backend.tf.tpl doesn't exist - $_BACKEND_TPL"
+        #         exit 1
+        #     fi
+        # else
+        #     echo "[ERROR] The supplied live directory doesn't exist - $_LIVE_DIR"
+        #     exit 1
+        # fi
+
+        if [[ -z "$TF_VAR_app_name" ]]; then
+            echo "[ERROR] Must set TF_VAR_app_name environment variable"
+            exit 1
+        fi
+
+        if [[ -z "$TF_VAR_region" ]]; then
+            echo "[ERROR] Must set TF_VAR_region environment variable"
+            exit 
+        fi
+
+        cd "${_BRANCH_NAME}"/ || exit
+        echo "Show PWD again $PWD should be in subdir for branch"
+        # echo "STARTING TERRAFORM INIT"
+        # terraform init
+        # echo "END TERRAFORM INIT"
+        #echo "STARTING OUTPUT VARIABLE"
+        echo
+        #OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
+        #terraform state list
+        #terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode
+        echo pwd is $PWD
+        # echo test >>testfile.txt
+        # ls -l testfile.txt
+        OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${_BRANCH_NAME}" -input=false -detailed-exitcode)
+              OUT=$?
+              echo "the terraform plan exitcode is $OUT"
+              #OUT=2 # force it for testing
+              if [ $OUT -eq 0 ];then
+                  echo "No changes. Infrastructure is up-to-date!"
+                  sleep 1
+              elif [ $OUT -eq 1 ];then
+                  echo "Terraform planned has failed!"
+                  sleep 1
+                  exit 1
+              elif [ $OUT -eq 2 ];then
+                  echo "Changes have been noticed!"
+                  sleep 1
+                  terraform show ./out_plan_file
+              else
+                  echo "Terraform planned has failed!"
+                  exit 1
+              fi
+    name: terraform_plan
 # jobs:
 # - job: SHowBranchName
 #   steps:
