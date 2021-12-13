@@ -70,12 +70,14 @@ jobs:
       inputs:
         awsCredentials: 'aws-AzureDevopsiamuser'
         regionName: 'us-east-1'
+        arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
         scriptType: 'inline'
         # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
         inlineScript: |
-          export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
-          export BRANCH_NAME=${{parameters.BRANCH_NAME}}
-          echo TF_VAR_app_name=$TF_VAR_app_name
+          echo args are $1 $2 $3
+          export ssF_VAR_app_name=$1
+          export TF_VAR_region=$2
+          export BRANCH_NAME=$3
           echo "Preparing terraform backend"
           preps/prepare-backend.sh
       name: prepare_backend 
