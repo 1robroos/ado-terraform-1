@@ -1,7 +1,9 @@
 #!/bin/bash
+
+echo "[DEBUG] running $0"
 _LIVE_DIR=${LIVE_DIR:=live}
 _BACKEND_TPL=${BACKEND_TPL:=backend.tf.tpl}
-
+echo "[DEBUG] branch name $BRANCH_NAME"
 if [[ -z "$BRANCH_NAME" ]]; then
     _BRANCH_NAME=$(git branch --show-current)
 else
@@ -41,6 +43,7 @@ if [[ -z "$AWS_REGION" ]]; then
 fi
 
 _STACK_NAME="${TF_VAR_app_name}-${_BRANCH_NAME}"
+echo "[DEBUG] stack name $STACKNAME"
 _STACK_EXISTS=$(trap 'aws cloudformation describe-stacks --stack-name '"$_STACK_NAME"'' EXIT)
 _STACK_EXISTS=$(echo "$_STACK_EXISTS" | grep "CreationTime")
 if [[ -z "$_STACK_EXISTS" ]]; then
