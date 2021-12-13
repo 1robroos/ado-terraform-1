@@ -65,7 +65,7 @@ jobs:
           echo pwd is $PWD
           echo "Preparing files and folders"
           preps/prepare-files-folders.sh        
-      name: prepare-files-folders
+      name: prepare_files_folders
     - task: AWSShellScript@1
       inputs:
         awsCredentials: 'aws-AzureDevopsiamuser'
