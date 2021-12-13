@@ -60,7 +60,7 @@ jobs:
           pwd
           ls -l
           
-          cd "${BRANCH_NAME}"/ || exit
+          #cd "${BRANCH_NAME}"/ || exit
           echo pwd is $PWD
           echo "Preparing files and folders"
           preps/prepare-files-folders.sh        
