@@ -5,43 +5,36 @@
 #       vmImage: 'ubuntu-latest'
 steps:
 - script: |
-    #cd preps
     export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
     export BRANCH_NAME=${{parameters.BRANCH_NAME}}
     echo TF_VAR_app_name=$TF_VAR_app_name
     preps/prepare-files-folders.sh
   displayName: 'script-prepare-files-folders'    
-# - script: |
-#     cd preps
-#     export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
-#     export BRANCH_NAME=${{parameters.BRANCH_NAME}}
-#     echo TF_VAR_app_name=$TF_VAR_app_name
-#     ./prepare-backend.sh
-#   displayName:  'script-prepare-backend'
-- task: AWSShellScript@1
+
+  # - task: AWSShellScript@1
+  # inputs:
+  #   awsCredentials: 'aws-AzureDevopsiamuser'
+  #   regionName: 'us-east-1'
+  #   scriptType: 'inline'
+  #   # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
+  #   inlineScript: |
+  #     export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
+  #     export BRANCH_NAME=${{parameters.BRANCH_NAME}}
+  #     echo TF_VAR_app_name=$TF_VAR_app_name
+  #     preps/prepare-backend.sh
+  # name: script_prepare_backend 
+
+
+    #deze nog testen ipv awsshellscript script_prepare_backend
+- task: CloudFormationCreateOrUpdateStack@1
   inputs:
     awsCredentials: 'aws-AzureDevopsiamuser'
     regionName: 'us-east-1'
-    scriptType: 'inline'
-    # see https://github.com/JamesDLD/terraform/blob/master/pipeline/terraform.yml 
-    inlineScript: |
-      export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
-      export BRANCH_NAME=${{parameters.BRANCH_NAME}}
-      echo TF_VAR_app_name=$TF_VAR_app_name
-      preps/prepare-backend.sh
-  name: script_prepare_backend 
-
-
-      # deze nog testen ipv awsshellscript script_prepare_backend
-    # - task: CloudFormationCreateOrUpdateStack@1
-    #   inputs:
-    #     awsCredentials: 'aws-AzureDevopsiamuser'
-    #     regionName: 'us-east-1'
-    #     stackName: 'kfsol-dev-app'
-    #     templateSource: 'file'
-    #     templateFile: '../cloudformation/cfn-tfbackend.yml'
-    #     useChangeSet: true
-    #     changeSetName: 'csname'
+    stackName: 'kfsol-dev-app'
+    templateSource: 'file'
+    templateFile: '../cloudformation/cfn-tfbackend.yml'
+    useChangeSet: true
+    changeSetName: 'csname'
 
     # - task: AWSShellScript@1
     #   inputs:
