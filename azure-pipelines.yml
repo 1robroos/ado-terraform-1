@@ -12,6 +12,7 @@ parameters:
   
 
 variables:
+    System.Debug: true  
   - name: TF_VAR_app_name
     value: "kfsolapp"
   - name: vmImageName
