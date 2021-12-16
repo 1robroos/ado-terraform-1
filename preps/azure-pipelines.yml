@@ -48,7 +48,7 @@ steps:
     stackName: 'kfsol-dev-app'
     templateSource: 'file'
     templateFile: 'cloudformation/cfn-tfbackend.yml'
-    templateParametersFile: 'parameters.yml'
+    templateParametersFile: 'cloudformation/parameters.yml'
     useChangeSet: true
     changeSetName: 'csname'
 
