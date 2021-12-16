@@ -32,7 +32,7 @@ steps:
     regionName: 'us-east-1'
     stackName: 'kfsol-dev-app'
     templateSource: 'file'
-    templateFile: '../cloudformation/cfn-tfbackend.yml'
+    templateFile: 'cloudformation/cfn-tfbackend.yml'
     useChangeSet: true
     changeSetName: 'csname'
 
