@@ -1,0 +1,7 @@
+
+Parameters:
+- ParameterKey: AppName
+  ParameterValue: ${{parameters.TF_VAR_app_name}}
+- ParameterKey: Environment
+  ParameterValue: ${{parameters.BRANCH_NAME}}
+

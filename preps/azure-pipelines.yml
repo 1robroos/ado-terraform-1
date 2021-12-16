@@ -26,6 +26,21 @@ steps:
 
 
     #deze nog testen ipv awsshellscript script_prepare_backend
+#     #'Parameters: [Environment, AppName] must have values',
+#     Optional path to an existing file containing the template parameters in JSON or YAML format. If your template does not require parameters leave the field empty.
+
+# CloudFormation expects the file to contain an array of one or more parameter objects. Each object specifies the name of the parameter as ParameterKey and the corresponding value in ParameterValue. For example (in JSON format):
+
+# [
+# 	{
+# 		"ParameterKey":"parameter1",
+# 		"ParameterValue":"parameter1value"},
+# 	{
+# 		"ParameterKey":"parameter2",
+# 		"ParameterValue":"parameter2value"}
+# ]```
+
+# For more information, go to [Template Anatomy](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html) in the AWS CloudFormation User Guide.
 - task: CloudFormationCreateOrUpdateStack@1
   inputs:
     awsCredentials: 'aws-AzureDevopsiamuser'
@@ -33,6 +48,7 @@ steps:
     stackName: 'kfsol-dev-app'
     templateSource: 'file'
     templateFile: 'cloudformation/cfn-tfbackend.yml'
+    templateParametersFile: 'parameters.yml'
     useChangeSet: true
     changeSetName: 'csname'
 
