@@ -51,7 +51,7 @@ steps:
     templateSource: 'file'
     templateFile: 'cloudformation/cfn-tfbackend.yml'
     templateParametersFile: 'cloudformation/parameters.json'
-    useChangeSet: true
+    #useChangeSet: true
 #     changeSetName: 'csname'
 
 
