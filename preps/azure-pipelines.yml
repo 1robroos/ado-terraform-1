@@ -57,18 +57,18 @@ steps:
 
 
 - task: CloudFormationCreateOrUpdateStack@1
-inputs:
-  awsCredentials: 'aws-AzureDevopsiamuser'
-  regionName: 'us-east-1'
-  stackName: 'stack1'
-  templateSource: 'file'
-  templateFile: 'cloudformation/cfn-tfbackend.yml'
-  templateParametersSource: 'inline'
-  templateParameters: |
-    - ParameterKey: AppName
-      ParameterValue: ${{parameters.TF_VAR_app_name}}
-    - ParameterKey: Environment
-      ParameterValue: ${{parameters.BRANCH_NAME}}
+  inputs:
+    awsCredentials: 'aws-AzureDevopsiamuser'
+    regionName: 'us-east-1'
+    stackName: 'stack1'
+    templateSource: 'file'
+    templateFile: 'cloudformation/cfn-tfbackend.yml'
+    templateParametersSource: 'inline'
+    templateParameters: |
+      - ParameterKey: AppName
+        ParameterValue: ${{parameters.TF_VAR_app_name}}
+      - ParameterKey: Environment
+        ParameterValue: ${{parameters.BRANCH_NAME}}
     # - task: AWSShellScript@1
     #   inputs:
     #     awsCredentials: 'aws-AzureDevopsiamuser'
