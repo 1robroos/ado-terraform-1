@@ -55,7 +55,7 @@ steps:
 #     changeSetName: 'csname'
 
 
-
+# now try with inline parameters. Are they substituted?
 - task: CloudFormationCreateOrUpdateStack@1
   inputs:
     awsCredentials: 'aws-AzureDevopsiamuser'
