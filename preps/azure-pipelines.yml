@@ -40,6 +40,8 @@ steps:
 # 		"ParameterValue":"parameter2value"}
 # ]```
 
+#cfn zegt:User: arn:aws:iam::969526043371:user/AzureDevOpsIamUser is not authorized to perform: dynamodb:DescribeTable on resource: arn:aws:dynamodb:us-east-1:969526043371:table/${{parameters.TF_VAR_app_name}}-state-lock-${{parameters.BRANCH_NAME}} (Service: AmazonDynamoDBv2; Status Code: 400; Error Code: AccessDeniedException; Request ID:
+
 # For more information, go to [Template Anatomy](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html) in the AWS CloudFormation User Guide.
 - task: CloudFormationCreateOrUpdateStack@1
   inputs:
