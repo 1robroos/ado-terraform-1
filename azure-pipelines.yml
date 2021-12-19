@@ -98,3 +98,35 @@ steps:
       echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(TerraformPLanVar.terraform_plan_exitcode)"   
     displayName: Show terraform_plan_exitcode in same job
 
+  - bash: |  
+    echo  SHow files
+    pwd
+    ls -l
+    echo
+    ls -l dev   
+    displayName: Show files
+    # You can organize pipeline jobs into stages. Stages are the major divisions in a pipeline: 
+    #   "build this app", "run these tests", and "deploy to pre-production" are good examples of stages. 
+    # They are logical boundaries in your pipeline where you can pause the pipeline and perform various checks.
+    # Every pipeline has at least one stage even if you do not explicitly define it. 
+    # You can also arrange stages into a dependency graph so that one stage runs before another one. There is a limit of 256 jobs for a stage.
+# - stage: Deploy
+#   #dependsOn: Plan
+#   jobs:
+#   - deployment: Terraform_Apply
+#     condition: eq(stageDependencies.Build.Terraform_Plan.outputs['TerraformPLanVar.terraform_plan_exitcode'], '2')
+#     variables:
+#       varBuildStage: $[stageDependencies.Build.Terraform_Plan.outputs['TerraformPLanVar.terraform_plan_exitcode']] 
+#     environment: 'staging'
+#     displayName: Deployment job in the staging env
+#     strategy:
+#     # default deployment strategy
+#       runOnce:
+#         deploy:
+#           steps:
+#             - bash: |  
+#                 echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is $(varBuildStage)
+#               displayName: Show terraform_plan_exitcode in other stage
+#             - script: terraform apply "./out_plan_file"
+#               displayName: "- Terraform Apply"
+
