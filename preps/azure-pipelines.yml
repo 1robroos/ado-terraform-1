@@ -40,35 +40,35 @@ steps:
 # 		"ParameterValue":"parameter2value"}
 # ]```
 
+# calling templateParametersFile does not work when the parameter values refer to variables used in the pipeline, like ParameterValue: ${{parameters.TF_VAR_app_name}}
 #cfn zegt:User: arn:aws:iam::969526043371:user/AzureDevOpsIamUser is not authorized to perform: dynamodb:DescribeTable on resource: arn:aws:dynamodb:us-east-1:969526043371:table/${{parameters.TF_VAR_app_name}}-state-lock-${{parameters.BRANCH_NAME}} (Service: AmazonDynamoDBv2; Status Code: 400; Error Code: AccessDeniedException; Request ID:
-
 # For more information, go to [Template Anatomy](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html) in the AWS CloudFormation User Guide.
-- task: CloudFormationCreateOrUpdateStack@1
-  inputs:
-    awsCredentials: 'aws-AzureDevopsiamuser'
-    regionName: 'us-east-1'
-    stackName: 'kfsol-dev-app'
-    templateSource: 'file'
-    templateFile: 'cloudformation/cfn-tfbackend.yml'
-    templateParametersFile: 'cloudformation/parameters.json'
-    #useChangeSet: true
-#     changeSetName: 'csname'
-
-
-# now try with inline parameters. Are they substituted?
 # - task: CloudFormationCreateOrUpdateStack@1
 #   inputs:
 #     awsCredentials: 'aws-AzureDevopsiamuser'
 #     regionName: 'us-east-1'
-#     stackName: 'stack1'
+#     stackName: 'kfsol-dev-app'
 #     templateSource: 'file'
 #     templateFile: 'cloudformation/cfn-tfbackend.yml'
-#     templateParametersSource: 'inline'
-#     templateParameters: |
-#       - ParameterKey: AppName
-#         ParameterValue: ${{parameters.TF_VAR_app_name}}
-#       - ParameterKey: Environment
-#         ParameterValue: ${{parameters.BRANCH_NAME}}
+#     templateParametersFile: 'cloudformation/parameters.json'
+#     #useChangeSet: true
+# #     changeSetName: 'csname'
+
+
+# this works: use the cloudformation parameter substitution with inline parameters:
+- task: CloudFormationCreateOrUpdateStack@1
+  inputs:
+    awsCredentials: 'aws-AzureDevopsiamuser'
+    regionName: 'us-east-1'
+    stackName: 'stack1'
+    templateSource: 'file'
+    templateFile: 'cloudformation/cfn-tfbackend.yml'
+    templateParametersSource: 'inline'
+    templateParameters: |
+      - ParameterKey: AppName
+        ParameterValue: ${{parameters.TF_VAR_app_name}}
+      - ParameterKey: Environment
+        ParameterValue: ${{parameters.BRANCH_NAME}}
     # - task: AWSShellScript@1
     #   inputs:
     #     awsCredentials: 'aws-AzureDevopsiamuser'
