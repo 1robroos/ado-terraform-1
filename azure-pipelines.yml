@@ -95,7 +95,7 @@ steps:
     name: terraformplan
 
   - bash: |  
-      echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(TerraformPLanVar.terraform_plan_exitcode)"   
+      echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"   
     displayName: Show terraform_plan_exitcode in same job
 
   - bash: |  
