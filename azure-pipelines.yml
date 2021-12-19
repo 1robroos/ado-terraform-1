@@ -99,12 +99,13 @@ steps:
     displayName: Show terraform_plan_exitcode in same job
 
   - bash: |  
-    echo  SHow files
-    pwd
-    ls -l
-    echo
-    ls -l dev   
+      echo  SHow files
+      pwd
+      ls -l
+      echo
+      ls -l dev   
     displayName: Show files
+
     # You can organize pipeline jobs into stages. Stages are the major divisions in a pipeline: 
     #   "build this app", "run these tests", and "deploy to pre-production" are good examples of stages. 
     # They are logical boundaries in your pipeline where you can pause the pipeline and perform various checks.
