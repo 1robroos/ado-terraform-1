@@ -125,7 +125,7 @@ steps:
       inlineScript: |
         # You can write your script inline here
         echo doit
-        echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is $terraform_plan_exitcode or $(terraform_plan_exitcode)
+        echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"
         echo echo terraform apply "./out_plan_file"
                     
   # - task: AWSShellScript@1
