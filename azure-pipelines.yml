@@ -33,7 +33,7 @@ trigger:
     - stg
     - prd
 
-    pool:
+pool:
   vmImage: 'ubuntu-latest'
 
 steps:
