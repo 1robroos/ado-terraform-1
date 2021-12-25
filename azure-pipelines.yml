@@ -115,7 +115,7 @@ steps:
     # They are logical boundaries in your pipeline where you can pause the pipeline and perform various checks.
     # Every pipeline has at least one stage even if you do not explicitly define it. 
     # You can also arrange stages into a dependency graph so that one stage runs before another one. There is a limit of 256 jobs for a stage.
-stages:
+#stages:
   - stage: Deploy
     #dependsOn: Plan
     jobs:
