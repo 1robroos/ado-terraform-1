@@ -115,24 +115,32 @@ steps:
     # They are logical boundaries in your pipeline where you can pause the pipeline and perform various checks.
     # Every pipeline has at least one stage even if you do not explicitly define it. 
     # You can also arrange stages into a dependency graph so that one stage runs before another one. There is a limit of 256 jobs for a stage.
-#stages:
-  - stage: Deploy
-    #dependsOn: Plan
-    jobs:
-    - deployment: Terraform_Apply
-      condition: eq(stageDependencies.Build.Terraform_Plan.outputs['TerraformPLanVar.terraform_plan_exitcode'], '2')
-      variables:
-        varBuildStage: $[stageDependencies.Build.Terraform_Plan.outputs['TerraformPLanVar.terraform_plan_exitcode']] 
-      #environment: 'staging'
-      displayName: Deployment job in the staging env
-      strategy:
-      # default deployment strategy
-        runOnce:
-          deploy:
-            steps:
-              - bash: |  
-                  echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is $(varBuildStage)
-                displayName: Show terraform_plan_exitcode in other stage
-              - script: echo terraform apply "./out_plan_file"
-                displayName: "- Terraform Apply"
+
+  - task: AWSShellScript@1
+    inputs:
+      awsCredentials: 'aws-AzureDevopsiamuser'
+      regionName: 'eu-central-1'
+      arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
+      scriptType: 'inline'
+      inlineScript: |
+        # You can write your script inline here
+        echo doit
+        echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is $terraform_plan_exitcode or $(terraform_plan_exitcode)
+        echo echo terraform apply "./out_plan_file"
+                    
+  # - task: AWSShellScript@1
+  #     condition: eq(stageDependencies.Build.Terraform_Plan.outputs['TerraformPLanVar.terraform_plan_exitcode'], '2')
+  #     variables:
+  #       varBuildStage: $[stageDependencies.Build.Terraform_Plan.outputs['TerraformPLanVar.terraform_plan_exitcode']] 
+  #     displayName: Deployment job in the staging env
+  #     strategy:
+  #     # default deployment strategy
+  #       runOnce:
+  #         deploy:
+  #           steps:
+  #             - bash: |  
+  #                 echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is $(varBuildStage)
+  #               displayName: Show terraform_plan_exitcode in other stage
+  #             - script: echo terraform apply "./out_plan_file"
+  #               displayName: "- Terraform Apply"
 
