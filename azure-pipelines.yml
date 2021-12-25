@@ -1,5 +1,4 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
+# See https://onedrive.live.com/redir?resid=7AFAA849794F34C8%21134&page=Edit&wd=target%28Azure%20Devops.one%7Cae1f2799-c12d-4b89-93a3-07c08b68ee3c%2Fsimplify%7C713bc2d8-1480-4e5b-b9f2-051d9a9ce043%2F%29&wdorigin=703
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 name: $(Date:yyyyMMdd)$(Rev:.r)
@@ -27,9 +26,14 @@ variables:
 
 trigger:
 - dev
+trigger: 
+  branches: 
+    include: 
+    - dev
+    - stg
+    - prd
 
-pool:
-
+    pool:
   vmImage: 'ubuntu-latest'
 
 steps:
