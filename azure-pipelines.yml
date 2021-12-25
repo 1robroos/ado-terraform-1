@@ -24,8 +24,8 @@ variables:
   - name: BRANCH_NAME
     value: $(Build.SourceBranchName)
 
-trigger:
-- dev
+# trigger:
+# - dev
 trigger: 
   branches: 
     include: 
