@@ -128,7 +128,7 @@ steps:
         echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"
         #echo echo terraform apply "./out_plan_file"
 
-        OUT=$(terraform apply dev/out_plan_file -var environment="${BRANCH_NAME}" -input=false)
+        OUT=$(terraform apply  -var environment="${BRANCH_NAME}" -input=false dev/out_plan_file)
         #OUT=$(pwd; ls -l ; echo; echo; ls -ltR)
               OUT=$?
               echo "the terraform plan exitcode is $OUT"
