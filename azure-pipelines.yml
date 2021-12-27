@@ -127,6 +127,7 @@ steps:
         # You can write your script inline here
         echo doit
         echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"
+        cd "${BRANCH_NAME}"/ || exit  
         TF_IN_AUTOMATION=yes
         OUT=$(terraform apply  -input=false dev/out_plan_file)
         OUT=$?
