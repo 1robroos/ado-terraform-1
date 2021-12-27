@@ -59,6 +59,7 @@ steps:
         cd "${BRANCH_NAME}"/ || exit
         echo pwd is $PWD        
         echo "STARTING TERRAFORM INIT"
+        TF_IN_AUTOMATION=yes
         terraform init
     name: terraforminit
 
@@ -93,7 +94,7 @@ steps:
                   sleep 1
                   terraform show ./out_plan_file
               else
-                  echo "Terraform planned has failed!"s
+                  echo "Terraform planned has failed!"
                   exit 1
               fi
     name: terraformplan
@@ -105,9 +106,9 @@ steps:
   - bash: |  
       echo  SHow files
       pwd
-      ls -l
+      ls -la
       echo
-      ls -l dev   
+      ls -la dev   
     displayName: Show files
 
     # You can organize pipeline jobs into stages. Stages are the major divisions in a pipeline: 
@@ -126,7 +127,6 @@ steps:
         # You can write your script inline here
         echo doit
         echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"
-        #echo echo terraform apply "./out_plan_file"
         TF_IN_AUTOMATION=yes
         OUT=$(terraform apply  -input=false dev/out_plan_file)
         OUT=$?
