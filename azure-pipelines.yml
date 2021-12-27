@@ -129,8 +129,15 @@ steps:
         echo echo terraform apply "./out_plan_file"
 
         #OUTPUT=$(terraform apply "./out_plan_file -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
-        OUTPUT=$(pwd; ls -l ; echo; echo; ls -ltR)
+        OUT=$(pwd; ls -l ; echo; echo; ls -ltR)
               OUT=$?
+              echo $OUT
+              echo
+              echo blabla
+              ls  -l
+              echo
+              ls -ltR
+              echo
               echo "the terraform plan exitcode is $OUT"
               #OUT=2 # force it for testing
               if [ $OUT -eq 0 ];then
