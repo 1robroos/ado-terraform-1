@@ -60,7 +60,7 @@ steps:
   inputs:
     awsCredentials: 'aws-AzureDevopsiamuser'
     regionName: 'us-east-1'
-    stackName: 'stack1'
+    stackName: '${{parameters.TF_VAR_app_name}}-${{parameters.BRANCH_NAME}}'
     templateSource: 'file'
     templateFile: 'cloudformation/cfn-tfbackend.yml'
     templateParametersSource: 'inline'
