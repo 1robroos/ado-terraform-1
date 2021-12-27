@@ -90,7 +90,6 @@ steps:
                   exit 1
               elif [ $OUT -eq 2 ];then
                   echo "Changes have been noticed!"
-                  echo "##vso[task.setvariable variable=terraform_plan_exitcode;isOutput=true]$OUT"
                   sleep 1
                   terraform show ./out_plan_file
               else
@@ -119,6 +118,7 @@ steps:
     # Every pipeline has at least one stage even if you do not explicitly define it. 
     # You can also arrange stages into a dependency graph so that one stage runs before another one. There is a limit of 256 jobs for a stage.
 
+
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
@@ -128,30 +128,64 @@ steps:
       inlineScript: |
         #  You can write your script inline here
         echo doit
-        echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"
+        echo  SHow output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"
         cd "${BRANCH_NAME}"/ || exit  
         TF_IN_AUTOMATION=yes
-        OUT=$(terraform apply  -input=false ./out_plan_file)
-        OUT=$?
-              echo "the terraform plan exitcode is $OUT"
-              #OUT=2 # force it for testing
-              if [ $OUT -eq 0 ];then
-                  echo "Terraform apply should have run correctly!"
-                  sleep 1
-              elif [ $OUT -eq 1 ];then
-                  echo "Terraform apply has failed!"
-                  sleep 1
+        # OUT=$(terraform apply  -input=false ./out_plan_file)
+        # OUT=$?
+        #       echo "the terraform plan exitcode is $OUT"
+        #       #OUT=2 # force it for testing
+              if [ $(terraformplan.terraform_plan_exitcode) -eq 0 ];then
+                  echo "Terraform apply will not run because terraform plan has no changes."
+              elif [ $(terraformplan.terraform_plan_exitcode) -eq 1 ];then
+                  echo "Terraform apply will not run because terraform plan has failed!"
                   exit 1
               elif [ $OUT -eq 2 ];then
-                  echo "Changes have been noticed!"
-                  echo "##vso[task.setvariable variable=terraform_plan_exitcode;isOutput=true]$OUT"
-                  sleep 1
+                  echo "Changes have been noticed by terraform plan! I will show you: "
                   terraform show ./out_plan_file
+                  echo
+                  echo
+                  echo "Now apply will run:"
+                  terraform apply  -input=false ./out_plan_file
               else
-                  echo "Terraform apply has failed! THis is else. OUT=$OUT"
+                  echo "Terraform apply has failed! THis is else."
                   exit 1
               fi
     name: terraformapply
+    
+  # - task: AWSShellScript@1
+  #   inputs:
+  #     awsCredentials: 'aws-AzureDevopsiamuser'
+  #     regionName: 'eu-central-1'
+  #     arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
+  #     scriptType: 'inline'
+  #     inlineScript: |
+  #       #  You can write your script inline here
+  #       echo doit
+  #       echo  SHow IN OTHER STAGE the output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"
+  #       cd "${BRANCH_NAME}"/ || exit  
+  #       TF_IN_AUTOMATION=yes
+  #       OUT=$(terraform apply  -input=false ./out_plan_file)
+  #       OUT=$?
+  #             echo "the terraform plan exitcode is $OUT"
+  #             #OUT=2 # force it for testing
+  #             if [ $OUT -eq 0 ];then
+  #                 echo "Terraform apply should have run correctly!"
+  #                 sleep 1
+  #             elif [ $OUT -eq 1 ];then
+  #                 echo "Terraform apply has failed!"
+  #                 sleep 1
+  #                 exit 1
+  #             elif [ $OUT -eq 2 ];then
+  #                 echo "Changes have been noticed!"
+  #                 echo "##vso[task.setvariable variable=terraform_plan_exitcode;isOutput=true]$OUT"
+  #                 sleep 1
+  #                 terraform show ./out_plan_file
+  #             else
+  #                 echo "Terraform apply has failed! THis is else. OUT=$OUT"
+  #                 exit 1
+  #             fi
+  #   name: terraformapply
                     
   # - task: AWSShellScript@1
   #     condition: eq(stageDependencies.Build.Terraform_Plan.outputs['TerraformPLanVar.terraform_plan_exitcode'], '2')
