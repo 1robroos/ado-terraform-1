@@ -39,7 +39,7 @@ resource "aws_s3_bucket_object" "app" {
 
 resource "aws_security_group" "zomaar" {
   name        = format("%s-zomaar-sg", var.environment)
-  description = "Security group for ${var.name} app"
+  description = "Security group for ${var.environment} app"
   vpc_id      = "vpc-06bceb9729a541195"
   tags = {
     Name = format("%s-zomaar-sg", var.environment)
