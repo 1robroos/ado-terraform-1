@@ -14,7 +14,7 @@
 # }
 
 
-
+# 27-12-2021: created bucket name in dev is terraform-20211227154220019500000001
 resource "aws_s3_bucket" "app" {
   acl = "public-read"
 

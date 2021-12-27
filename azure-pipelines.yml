@@ -109,6 +109,8 @@ steps:
       ls -la
       echo
       ls -la dev   
+      echo show tree
+      tree
     displayName: Show files
 
     # You can organize pipeline jobs into stages. Stages are the major divisions in a pipeline: 
