@@ -79,8 +79,8 @@ steps:
         echo "STARTING TERRAFORM PLAN"
         OUTPUT=$(terraform plan -out="./out_plan_file" -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
               OUT=$?
+              echo "##vso[task.setvariable variable=terraform_plan_exitcode;isOutput=true]$OUT"
               echo "the terraform plan exitcode is $OUT"
-              #OUT=2 # force it for testing
               if [ $OUT -eq 0 ];then
                   echo "No changes. Infrastructure is up-to-date!"
                   sleep 1
