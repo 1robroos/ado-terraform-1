@@ -60,7 +60,9 @@ steps:
         cd "${BRANCH_NAME}"/ || exit
         echo pwd is $PWD        
         echo "STARTING tflint for checking scripts in dir $BRANCH_NAME "
-        ./tflint
+        ls -la
+        echo
+        ./tflint --init
         RCLINT=$0
         if [ $RCLINT != 0 ]
         then
