@@ -44,5 +44,6 @@ resource "aws_security_group" "zomaar" {
   tags = {
     Name = format("%s-zomaar-sg", var.environment)
     Terrafom = true
+    Stage = var.environment
   }
 }
