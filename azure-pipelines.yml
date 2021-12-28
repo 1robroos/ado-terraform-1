@@ -168,11 +168,11 @@ steps:
                   exit 1
               elif [ "$(terraformplan.terraform_plan_exitcode)" -eq 2 ];then
                   echo "Changes have been noticed by terraform plan! I will show you: "
-                  terraform show ./out_plan_file
+                  $TERRAFORM show ./out_plan_file
                   echo
                   echo
                   echo "Now apply will run:"
-                  $$TERRAFORM apply  -input=false ./out_plan_file
+                  $TERRAFORM apply  -input=false ./out_plan_file
               else
                   echo "Terraform apply has failed! THis is else."
                   exit 1
