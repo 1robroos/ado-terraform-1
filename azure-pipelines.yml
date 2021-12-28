@@ -87,7 +87,7 @@ steps:
         export TF_VAR_region=$2
         export BRANCH_NAME=$3
         cd "${BRANCH_NAME}"/ || exit
-        echo pwd is $PWD        
+        echo pwd is  $PWD        
         echo "STARTING TERRAFORM INIT"
         TF_IN_AUTOMATION=yes
         terraform init
