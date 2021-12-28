@@ -23,6 +23,9 @@ variables:
     value: "us-east-1"
   - name: BRANCH_NAME
     value: $(Build.SourceBranchName)
+  - name: TERRAFORM
+    value: $(Agent.BuildDirectory)/terraform_1.0.5
+
 
 # trigger:
 # - dev
@@ -90,7 +93,7 @@ steps:
         echo pwd is  $PWD        
         echo "STARTING TERRAFORM INIT"
         TF_IN_AUTOMATION=yes
-        terraform init
+        $TERRAFORM init
     name: terraforminit
 
   # teraform plan
