@@ -24,7 +24,7 @@ variables:
   - name: BRANCH_NAME
     value: $(Build.SourceBranchName)
   - name: TERRAFORM
-    value: $(Agent.BuildDirectory)/terraform_1.0.5
+    value: $(System.DefaultWorkingDirectory)/terraform_1.0.5
 
 
 # trigger:
