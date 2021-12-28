@@ -5,6 +5,9 @@
 *.tfstate
 *.tfstate.*
 
+# my memory lane
+/old/*
+
 # Crash log files
 crash.log
 
