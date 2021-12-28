@@ -37,12 +37,40 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  # prepares files and folders for this stage and prepares aws S3 buckets for terraform state file.
+  # prepares files and folders for this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
   - template: preps/azure-pipelines.yml
     parameters:
       TF_VAR_app_name: $(TF_VAR_app_name)
       BRANCH_NAME: $(BRANCH_NAME)
       TF_VAR_region: $(TF_VAR_region)
+
+            
+  # Let's lint before doing anything further that consumes unneeded energy.
+  - task: AWSShellScript@1
+    inputs:
+      awsCredentials: 'aws-AzureDevopsiamuser'
+      regionName: 'us-east-1'
+      arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
+      scriptType: 'inline'
+      inlineScript: |
+        echo args are $1 $2 $3
+        export TF_VAR_app_name=$1
+        export TF_VAR_region=$2
+        export BRANCH_NAME=$3
+        cd "${BRANCH_NAME}"/ || exit
+        echo pwd is $PWD        
+        echo "STARTING tflint for checking scripts in dir $BRANCH_NAME "
+        ./tflint
+        RCLINT=$0
+        if [ $RCLINT != 0 ]
+        then
+          echo "tflint reports an error"
+          exit 1
+        else
+          echo "All is fine for tflint to continu."
+        fi
+    name: tflint
+
 
   # terraform init
   - task: AWSShellScript@1
