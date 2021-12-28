@@ -43,6 +43,6 @@ resource "aws_security_group" "zomaar" {
   vpc_id      = "vpc-06bceb9729a541195"
   tags = {
     Name = format("%s-zomaar-sg", var.environment)
-    Terrafom = yes
+    Terrafom = true
   }
 }
