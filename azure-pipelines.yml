@@ -170,7 +170,6 @@ steps:
                   echo "Changes have been noticed by terraform plan! I will show you: "
                   $TERRAFORM show ./out_plan_file
                   echo
-                  echo
                   echo "Now apply will run:"
                   $TERRAFORM apply  -input=false ./out_plan_file
               else
