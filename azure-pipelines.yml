@@ -63,7 +63,7 @@ steps:
         ls -la
         echo
         ./tflint --init
-        RCLINT=$0
+        RCLINT=$?
         if [ $RCLINT != 0 ]
         then
           echo "tflint reports an error"
