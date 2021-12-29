@@ -182,7 +182,10 @@ steps:
     name: terraformapply
 
   - bash: |  
-      echo  promote to stg
+      echo  promote to stg after a small change in dev
+      echo So change soemthign into dev 
+      echo then push it to dev branch
+      echo then  create a pr to merge dev into stg
     displayName: promote_to_stg
 
         
