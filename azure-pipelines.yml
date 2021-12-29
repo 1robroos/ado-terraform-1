@@ -186,6 +186,7 @@ steps:
       echo So change soemthign into dev 
       echo then push it to dev branch
       echo then  create a pr to merge dev into stg
+      echo new line in dev  wo 29 dec 2021 20:36:56 CET
     displayName: promote_to_stg
 
         
