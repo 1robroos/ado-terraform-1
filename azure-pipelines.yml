@@ -35,8 +35,8 @@ trigger:
     - dev
     # - stg
     # - prd
-  pr:
-     - stg
+pr:
+- stg
 
 
 pool:
