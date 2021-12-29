@@ -180,7 +180,12 @@ steps:
                   exit 1
               fi
     name: terraformapply
-    
+
+  - bash: |  
+      echo  promote to stg
+    displayName: promote_to_stg
+
+        
   # - task: AWSShellScript@1
   #   inputs:
   #     awsCredentials: 'aws-AzureDevopsiamuser'
