@@ -33,12 +33,11 @@ trigger:
   branches: 
     include: 
     - dev
-    # - stg
+    - stg
     # - prd
-pr:
-- stg
-
-
+# pr:
+# - stg
+  
 pool:
   vmImage: 'ubuntu-latest'
 
