@@ -38,6 +38,9 @@ trigger:
 # pr:
 # - stg
   
+# no PR triggers
+pr: none
+
 pool:
   vmImage: 'ubuntu-latest'
 
