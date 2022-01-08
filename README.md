@@ -1,15 +1,18 @@
 # ado-terraform-1
 
-Automation with Azure devops , deploy resoruces in aws with cloudformation and terraform
+## Automation with Azure devops , deploy resoruces in aws with cloudformation and terraform
+
+### Build status
 
 dev branch : 
 [![Build Status](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_apis/build/status/1robroos.ado-terraform-1?branchName=dev)](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_build/latest?definitionId=25&branchName=dev)
 
 stg branch : 
 [![Build Status](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_apis/build/status/1robroos.ado-terraform-1?branchName=stg)](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_build/latest?definitionId=25&branchName=stg)
-# terraform-multienv
+# More explained
 
 A template for maintaining a multiple environments infrastructure with [Terraform](https://www.terraform.io/). This template includes a CI/CD process, that applies the infrastructure in an AWS account.
+Azure Devops is the CICD tool here.
 
 
 <!-- 
