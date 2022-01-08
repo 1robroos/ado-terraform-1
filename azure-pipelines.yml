@@ -30,6 +30,7 @@ variables:
 trigger:
 - dev
 - stg
+- prd
 # trigger: 
 #   branches: 
 #     include: 
