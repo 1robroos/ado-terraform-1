@@ -17,7 +17,7 @@ A template for maintaining a multiple environments infrastructure with [Terrafor
       <td>dev</td>
       <td><a href="https://cloud.drone.io/unfor19/terraform-multienv"><img src="https://cloud.drone.io/api/badges/unfor19/terraform-multienv/status.svg?ref=refs/heads/dev" /></a></td>
       <td><a href="https://github.com/unfor19/terraform-multienv/actions?query=workflow%3Apipeline"><img src="https://github.com/unfor19/terraform-multienv/workflows/pipeline/badge.svg?branch=dev" /></a></td>
-      <td><a href="https://github.com/1robroos/ado-terraform-1/badge_dev.html"><img src="https://github.com/1robroos/ado-terraform-1/badge_dev.html" /></a></td>
+      <td><a href="https://github.com/1robroos/ado-terraform-1/badge_dev.html"><img src="https://github.com/1robroos/ado-terraform-1/blob/dev/badge_dev.html" /></a></td>
     
    </tr>
    <tr>
