@@ -1,15 +1,17 @@
 # ado-terraform-1
 Test Azure devops and terraform, test1
 
+dev 
 [![Build Status](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_apis/build/status/1robroos.ado-terraform-1?branchName=dev)](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_build/latest?definitionId=25&branchName=dev)
 
+stg
 [![Build Status](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_apis/build/status/1robroos.ado-terraform-1?branchName=stg)](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_build/latest?definitionId=25&branchName=stg)
 # terraform-multienv
 
 A template for maintaining a multiple environments infrastructure with [Terraform](https://www.terraform.io/). This template includes a CI/CD process, that applies the infrastructure in an AWS account.
 
 
-
+<!-- 
 <table>
   <tr>
     <th>Company</th>
@@ -28,7 +30,7 @@ A template for maintaining a multiple environments infrastructure with [Terrafor
     <td>Francisco Chang</td>
     <td>Mexico</td>
   </tr>
-</table>
+</table> -->
 
 
 <!-- <table>
