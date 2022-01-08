@@ -29,6 +29,7 @@ variables:
 
 trigger:
 - dev
+- stg
 # trigger: 
 #   branches: 
 #     include: 
