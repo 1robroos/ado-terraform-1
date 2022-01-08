@@ -12,7 +12,7 @@ parameters:
 
 variables:
   - name: System.Debug
-    value: true  
+    value: false  
   - name: TF_VAR_app_name
     value: "kfsolapp"
   - name: vmImageName
@@ -27,14 +27,14 @@ variables:
     value: $(System.DefaultWorkingDirectory)/terraform_1.0.5
 
 
-# trigger:
-# - dev
-trigger: 
-  branches: 
-    include: 
-    - dev
-    - stg
-    # - prd
+trigger:
+- dev
+# trigger: 
+#   branches: 
+#     include: 
+#     - dev
+#     - stg
+#     # - prd
 # pr:
 # - stg
   
