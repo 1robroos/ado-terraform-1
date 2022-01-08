@@ -1,12 +1,14 @@
 # ado-terraform-1
 Test Azure devops and terraform, test1
+
 [![Build Status](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_apis/build/status/1robroos.ado-terraform-1?branchName=dev)](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_build/latest?definitionId=25&branchName=dev)
 
+[![Build Status](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_apis/build/status/1robroos.ado-terraform-1?branchName=stg)](https://dev.azure.com/1robroos/AzureDevOps_Terraform_test/_build/latest?definitionId=25&branchName=stg)
 # terraform-multienv
 
 A template for maintaining a multiple environments infrastructure with [Terraform](https://www.terraform.io/). This template includes a CI/CD process, that applies the infrastructure in an AWS account.
 
-<table>
+<!-- <table>
    <tr>
       <td>environment</td>
       <td><a href="https://github.com/unfor19/terraform-multienv/blob/dev/.drone.yml">drone.io</a></td>
@@ -34,4 +36,4 @@ A template for maintaining a multiple environments infrastructure with [Terrafor
       <td><a href="https://app.circleci.com/pipelines/github/unfor19/terraform-multienv?branch=prd"><img src="https://circleci.com/gh/unfor19/terraform-multienv/tree/prd.svg?style=svg" /></a></td>
       <td><a href="https://travis-ci.com/github/unfor19/terraform-multienv"><img src="https://travis-ci.com/unfor19/terraform-multienv.svg?branch=prd" /></a></td>        
    </tr>
-</table>
+</table> -->
