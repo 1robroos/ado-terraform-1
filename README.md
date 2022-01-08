@@ -1,6 +1,6 @@
 # ado-terraform-1
 
-## Automation with Azure devops , deploy resoruces in aws with cloudformation and terraform
+## Automation with Azure devops , deploy resources in aws with cloudformation and terraform
 
 ### Build status
 
