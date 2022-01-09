@@ -62,4 +62,8 @@ ls -l
 cd ${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}
 echo "Now changed the branch subdir $PWD"  
 ls -l
+echo check the files in dev
+cd ..
+pwd
+ls -l
 
