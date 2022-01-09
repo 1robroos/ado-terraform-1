@@ -2,20 +2,9 @@
 set -e
 #_LIVE_DIR=${LIVE_DIR:=live}
 LIVE_DIR=${LIVEDIR}
+echo var LIVE_DIR is passed through and has value $LIVE_DIR
 _BACKEND_TPL=${BACKEND_TPL:=backend.tf.tpl}
 
-# echo before if loop
-# echo var BRANCH_NAME is $BRANCH_NAME
-# echo 
-# echo show git show-branch 
-# git show-branch
-# echo "..........................."
-# echo 
-# echo show git branch
-# git branch
-# echo "..........................."
-
-# echo 
 # echo show git branch but test ADO predefined variable
 # echo 1 THis gives an error $(Build.SourceBranchName)
 echo 2 Predefined variable BUILD_SOURCEBRANCHNAME has value  $BUILD_SOURCEBRANCHNAME
@@ -47,10 +36,10 @@ fi
 [[ -d "$_BRANCH_NAME" ]] && rm -rf "$_BRANCH_NAME"
 mkdir -p "${_BRANCH_NAME}"/
 echo _BRANCH_NAME dir = ${_BRANCH_NAME}
-echo "Copying ${_LIVE_DIR} to ${_BRANCH_NAME}"
-cp "${_LIVE_DIR}"/* "${_BRANCH_NAME}"/
+echo "Copying ${LIVE_DIR} to ${_BRANCH_NAME}"
+cp "${LIVE_DIR}"/* "${_BRANCH_NAME}"/
 echo "Copying tflint configuration file for aws provider"
-cp  "${_LIVE_DIR}"/.tflint.hcl "${_BRANCH_NAME}"/
+cp  "${LIVE_DIR}"/.tflint.hcl "${_BRANCH_NAME}"/
 sed -i.bak 's~AWS_REGION~'"$AWS_REGION"'~' "${_BRANCH_NAME}/${_BACKEND_TPL}"
 sed -i.bak 's~APP_NAME~'"$TF_VAR_app_name"'~' "${_BRANCH_NAME}/${_BACKEND_TPL}"
 sed -i.bak 's~ENVIRONMENT~'"$_BRANCH_NAME"'~' "${_BRANCH_NAME}/${_BACKEND_TPL}"
