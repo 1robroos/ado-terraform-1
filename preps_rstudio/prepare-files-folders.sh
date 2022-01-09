@@ -53,7 +53,7 @@ cp  "${_LIVE_DIR}"/.tflint.hcl "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/
 sed -i.bak 's~AWS_REGION~'"$AWS_REGION"'~' "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}/${_BACKEND_TPL}"
 sed -i.bak 's~APP_NAME~'"$TF_VAR_app_name"'~' "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}/${_BACKEND_TPL}"
 sed -i.bak 's~ENVIRONMENT~'"$_BRANCH_NAME"'~' "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}/${_BACKEND_TPL}"
-mv "${_BRANCH_NAME}/${_BACKEND_TPL}" "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/backend.tf
+mv "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}/${_BACKEND_TPL}" "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/backend.tf
 echo "[LOG] Prepared files and folders for the environment - $_BRANCH_NAME/${TF_VAR_rstudio_app_name}"
 ls -lah "$_BRANCH_NAME/${TF_VAR_rstudio_app_name}"
 cat "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/backend.tf
@@ -61,4 +61,5 @@ echo "SHow PWD $PWD"
 ls -l
 cd ${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}
 echo "Now changed the branch subdir $PWD"  
+ls -l
 
