@@ -173,20 +173,20 @@ steps:
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: 'eu-central-1'
+      regionName: $(TF_VAR_region) # was per ongeluk 'eu-central-1'
       arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
       scriptType: 'inline'
       inlineScript: |
         #  You can write your script inline here
-        echo  SHow output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"
+        echo  SHow output variable terraform_plan_exitcode  is "$(terraformplan_bootstrap.terraform_plan_exitcode)"
         cd "${BRANCH_NAME}"/ || exit  
         TF_IN_AUTOMATION=yes
-              if [ "$(terraformplan.terraform_plan_exitcode)" -eq 0 ];then
+              if [ "$(terraformplan_bootstrap.terraform_plan_exitcode)" -eq 0 ];then
                   echo "Terraform apply will not run because terraform plan has no changes."
-              elif [ "$(terraformplan.terraform_plan_exitcode)" -eq 1 ];then
+              elif [ "$(terraformplan_bootstrap.terraform_plan_exitcode)" -eq 1 ];then
                   echo "Terraform apply will not run because terraform plan has failed!"
                   exit 1
-              elif [ "$(terraformplan.terraform_plan_exitcode)" -eq 2 ];then
+              elif [ "$(terraformplan_bootstrap.terraform_plan_exitcode)" -eq 2 ];then
                   echo "Changes have been noticed by terraform plan! I will show you: "
                   $TERRAFORM show ./out_plan_file
                   echo
@@ -317,15 +317,15 @@ steps:
       scriptType: 'inline'
       inlineScript: |
         #  You can write your script inline here
-        echo  SHow output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"
+        echo  SHow output variable terraform_plan_exitcode  is "$(terraformplan_rstudio.terraform_plan_exitcode)"
         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
         TF_IN_AUTOMATION=yes
-              if [ "$(terraformplan.terraform_plan_exitcode)" -eq 0 ];then
+              if [ "$(terraformplan_rstudio.terraform_plan_exitcode)" -eq 0 ];then
                   echo "Terraform apply will not run because terraform plan has no changes."
-              elif [ "$(terraformplan.terraform_plan_exitcode)" -eq 1 ];then
+              elif [ "$(terraformplan_rstudio.terraform_plan_exitcode)" -eq 1 ];then
                   echo "Terraform apply will not run because terraform plan has failed!"
                   exit 1
-              elif [ "$(terraformplan.terraform_plan_exitcode)" -eq 2 ];then
+              elif [ "$(terraformplan_rstudio.terraform_plan_exitcode)" -eq 2 ];then
                   echo "Changes have been noticed by terraform plan! I will show you: "
                   $TERRAFORM show ./out_plan_file
                   echo
