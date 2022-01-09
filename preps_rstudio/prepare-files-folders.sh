@@ -51,10 +51,14 @@ mkdir -p "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/
 echo _BRANCH_NAME dir = ${_BRANCH_NAME}
 echo "Copying ${_LIVE_DIR} to ${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}"
 cp "${_LIVE_DIR}"/* "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/
+echo debug show ls ltR 
+pwd 
+ls -ltR
+echo
 echo "Copying tflint configuration file for aws provider"
 cp  "${_LIVE_DIR}"/.tflint.hcl "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/
 sed -i.bak 's~AWS_REGION~'"$AWS_REGION"'~' "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}/${_BACKEND_TPL}"
-sed -i.bak 's~APP_NAME~'"$TF_VAR_app_name"'~' "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}/${_BACKEND_TPL}"
+sed -i.bak 's~APP_NAME~'"$TF_VAR_rstudio_app_name"'~' "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}/${_BACKEND_TPL}"
 sed -i.bak 's~ENVIRONMENT~'"$_BRANCH_NAME"'~' "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}/${_BACKEND_TPL}"
 mv "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}/${_BACKEND_TPL}" "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/backend.tf
 echo "[LOG] Prepared files and folders for the environment - $_BRANCH_NAME/${TF_VAR_rstudio_app_name}"
