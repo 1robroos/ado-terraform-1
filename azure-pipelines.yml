@@ -211,7 +211,7 @@ steps:
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: 'us-east-1'
+      regionName: $(TF_VAR_region)
       arguments: '$(TF_VAR_rstudio_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
       scriptType: 'inline'
       inlineScript: |
@@ -240,12 +240,14 @@ steps:
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: 'us-east-1'
+      regionName: $(TF_VAR_region)
       arguments: '$(TF_VAR_rstudio_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
       scriptType: 'inline'
       inlineScript: |
         echo args are $1 $2 $3
         export TF_VAR_rstudio_app_name=$1
+        # in variables.tf is gives the variable app_name so we have to define it here
+        export TF_VAR_app_name=$TF_VAR_rstudio_app_name
         export TF_VAR_region=$2
         export BRANCH_NAME=$3
         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
@@ -259,7 +261,7 @@ steps:
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: 'us-east-1'
+      regionName: $(TF_VAR_region)
       arguments: '$(TF_VAR_rstudio_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
       scriptType: 'inline'
       inlineScript: |
@@ -312,7 +314,7 @@ steps:
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: 'eu-central-1'
+      regionName: $(TF_VAR_region)
       arguments: '$(TF_VAR_rstudio_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
       scriptType: 'inline'
       inlineScript: |
