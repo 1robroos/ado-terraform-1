@@ -27,6 +27,8 @@ variables:
     value: $(System.DefaultWorkingDirectory)/terraform_1.0.5
   - name: TF_VAR_rstudio_app_name
     value: "rstudio"
+  - name: LIVEDIR
+    value: "live"  
 
 
 trigger:
@@ -52,17 +54,29 @@ steps:
       TF_VAR_app_name: $(TF_VAR_app_name)
       BRANCH_NAME: $(BRANCH_NAME)
       TF_VAR_region: $(TF_VAR_region)
+      LIVEDIR: $(LIVEDIR)
 
+
+# # ##########################################################################
+# # Prepare rstudio backend
+# # ##########################################################################
+#   # prepares files and folders for this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
+#   - template: preps_rstudio/azure-pipelines.yml
+#     parameters:
+#       TF_VAR_rstudio_app_name: $(TF_VAR_rstudio_app_name)
+#       BRANCH_NAME: $(BRANCH_NAME)
+#       TF_VAR_region: $(TF_VAR_region)
 
 # ##########################################################################
 # Prepare rstudio backend
 # ##########################################################################
   # prepares files and folders for this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
-  - template: preps_rstudio/azure-pipelines.yml
+  - template: preps/azure-pipelines.yml
     parameters:
-      TF_VAR_rstudio_app_name: $(TF_VAR_rstudio_app_name)
+      TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
       BRANCH_NAME: $(BRANCH_NAME)
       TF_VAR_region: $(TF_VAR_region)
+      LIVEDIR: $(LIVEDIR)_$(TF_VAR_rstudio_app_name)
 
 # ##########################################################################
 # From here the terraform actions take place which deploys your resources
@@ -329,10 +343,10 @@ steps:
                   exit 1
               elif [ "$(terraformplan_rstudio.terraformplan_rstudio_exitcode)" -eq 2 ];then
                   echo "Changes have been noticed by terraform plan! I will show you: "
-                  $TERRAFORM show ./rstudio_out_plan_file
+                  $TERRAFORM show ./rstudio/rstudio_out_plan_file
                   echo
                   echo "Now apply will run:"
-                  $TERRAFORM apply  -input=false ./rstudio_out_plan_file
+                  $TERRAFORM apply  -input=false ./rstudio/rstudio_out_plan_file
               else
                   echo "Terraform apply has failed! THis is else."
                   exit 1

@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-_LIVE_DIR=${LIVE_DIR:=live}
+#_LIVE_DIR=${LIVE_DIR:=live}
+LIVE_DIR=${LIVEDIR}
 _BACKEND_TPL=${BACKEND_TPL:=backend.tf.tpl}
 
 # echo before if loop
