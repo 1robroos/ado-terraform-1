@@ -246,8 +246,6 @@ steps:
       inlineScript: |
         echo args are $1 $2 $3
         export TF_VAR_rstudio_app_name=$1
-        # in variables.tf is gives the variable app_name so we have to define it here
-        export TF_VAR_app_name=$TF_VAR_rstudio_app_name
         export TF_VAR_region=$2
         export BRANCH_NAME=$3
         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
@@ -267,6 +265,8 @@ steps:
       inlineScript: |
         echo args are $1 $2 $3
         export TF_VAR_rstudio_app_name=$1
+        # in variables.tf is gives the variable app_name so we have to define it here
+        export TF_VAR_app_name=$TF_VAR_rstudio_app_name
         export TF_VAR_region=$2
         export BRANCH_NAME=$3
         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
