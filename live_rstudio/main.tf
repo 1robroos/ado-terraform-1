@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "rstudio" {
 }
 
 resource "aws_s3_bucket_object" "rstudio" {
-  bucket       = aws_s3_bucket.app.id
+  bucket       = aws_s3_bucket.rstudio.id
   key          = "index.html"
   acl          = "public-read"
   content      = "<h1>Welcome to the ${var.environment} rstudio environment</h1>"
