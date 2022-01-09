@@ -2,7 +2,10 @@ steps:
 - script: |
     export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
     export BRANCH_NAME=${{parameters.BRANCH_NAME}}
+    export LIVEDIR==${{parameters.LIVEDIR}}
+    echo LIVDIR= $LIVEDIR
     echo TF_VAR_app_name=$TF_VAR_app_name
+    
     echo "Create subfolder for $BRANCH_NAME and copy teraform files from live dir into it."
     echo " then substitute AWS_REGION, APP_NAME and ENVIRONMENT ( which is BRANCH_NAME) in backend.tf.tpl because terraform does not allow variables in backend.tf"
     echo "These terraform files hold the code for the resources you want to deploy."
