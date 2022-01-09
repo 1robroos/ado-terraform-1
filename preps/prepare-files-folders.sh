@@ -40,28 +40,51 @@ if [[ -z "$AWS_REGION" ]]; then
     echo "[ERROR] Must set AWS_REGION environment variable"
     exit 1
 fi
-# if [[ $LIVE_DIR= "live" ]]
-# then
-#     DIRTOCREATE=$_BRANCH_NAME
-# else
-#     DIRTOCREATE="
-    
+if [[ $LIVE_DIR= "live" ]]
+then
+    DIRTOCREATE=$_BRANCH_NAME
+else
+    DIRTOCREATE=$LIVE_DIR
+fi 
+echo dir to create = $DIRTOCREATE
+
 ##[[ -d "$_BRANCH_NAME" ]] && rm -rf "$_BRANCH_NAME"
-mkdir -p "${_BRANCH_NAME}"/
-echo _BRANCH_NAME dir = ${_BRANCH_NAME}
-echo "Copying ${LIVE_DIR} to ${_BRANCH_NAME}"
-cp "${LIVE_DIR}"/* "${_BRANCH_NAME}"/
+
+mkdir -p "${DIRTOCREATE}"/
+echo DIRTOCREATE dir = ${DIRTOCREATE}
+echo "Copying ${LIVE_DIR} to ${DIRTOCREATE}"
+cp "${LIVE_DIR}"/* "${DIRTOCREATE}"/
 echo "Copying tflint configuration file for aws provider"
-cp  "${LIVE_DIR}"/.tflint.hcl "${_BRANCH_NAME}"/
-sed -i.bak 's~AWS_REGION~'"$AWS_REGION"'~' "${_BRANCH_NAME}/${_BACKEND_TPL}"
-sed -i.bak 's~APP_NAME~'"$TF_VAR_app_name"'~' "${_BRANCH_NAME}/${_BACKEND_TPL}"
-sed -i.bak 's~ENVIRONMENT~'"$_BRANCH_NAME"'~' "${_BRANCH_NAME}/${_BACKEND_TPL}"
-mv "${_BRANCH_NAME}/${_BACKEND_TPL}" "${_BRANCH_NAME}"/backend.tf
-echo "[LOG] Prepared files and folders for the environment - $_BRANCH_NAME"
-ls -lah "$_BRANCH_NAME"
-cat "${_BRANCH_NAME}"/backend.tf
+cp  "${LIVE_DIR}"/.tflint.hcl "${DIRTOCREATE}"/
+sed -i.bak 's~AWS_REGION~'"$AWS_REGION"'~' "${DIRTOCREATE}/${_BACKEND_TPL}"
+sed -i.bak 's~APP_NAME~'"$TF_VAR_app_name"'~' "${DIRTOCREATE}/${_BACKEND_TPL}"
+sed -i.bak 's~ENVIRONMENT~'"$_BRANCH_NAME"'~' "${DIRTOCREATE}/${_BACKEND_TPL}"
+mv "${DIRTOCREATE}/${_BACKEND_TPL}" "${DIRTOCREATE}"/backend.tf
+echo "[LOG] Prepared files and folders for the environment - $DIRTOCREATE"
+ls -lah "$DIRTOCREATE"
+cat "${DIRTOCREATE}"/backend.tf
 echo "SHow PWD $PWD"
 ls -l
-cd ${_BRANCH_NAME}
+cd ${DIRTOCREATE}
 echo "Now changed the branch subdir $PWD"  #/home/vsts/work/1/s/preps/dev
+
+
+
+# mkdir -p "${_BRANCH_NAME}"/
+# echo _BRANCH_NAME dir = ${_BRANCH_NAME}
+# echo "Copying ${LIVE_DIR} to ${_BRANCH_NAME}"
+# cp "${LIVE_DIR}"/* "${_BRANCH_NAME}"/
+# echo "Copying tflint configuration file for aws provider"
+# cp  "${LIVE_DIR}"/.tflint.hcl "${_BRANCH_NAME}"/
+# sed -i.bak 's~AWS_REGION~'"$AWS_REGION"'~' "${_BRANCH_NAME}/${_BACKEND_TPL}"
+# sed -i.bak 's~APP_NAME~'"$TF_VAR_app_name"'~' "${_BRANCH_NAME}/${_BACKEND_TPL}"
+# sed -i.bak 's~ENVIRONMENT~'"$_BRANCH_NAME"'~' "${_BRANCH_NAME}/${_BACKEND_TPL}"
+# mv "${_BRANCH_NAME}/${_BACKEND_TPL}" "${_BRANCH_NAME}"/backend.tf
+# echo "[LOG] Prepared files and folders for the environment - $_BRANCH_NAME"
+# ls -lah "$_BRANCH_NAME"
+# cat "${_BRANCH_NAME}"/backend.tf
+# echo "SHow PWD $PWD"
+# ls -l
+# cd ${_BRANCH_NAME}
+# echo "Now changed the branch subdir $PWD"  #/home/vsts/work/1/s/preps/dev
 
