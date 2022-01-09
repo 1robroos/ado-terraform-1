@@ -94,7 +94,7 @@ steps:
         else
           echo "All is fine for tflint to continu."
         fi
-    name: tflint
+    name: tflint_bootstrap
 
 
   # terraform init
@@ -114,7 +114,7 @@ steps:
         echo "STARTING TERRAFORM INIT"
         TF_IN_AUTOMATION=yes
         $TERRAFORM init
-    name: terraforminit
+    name: terraforminit_bootstrap
 
   # teraform plan
   - task: AWSShellScript@1
@@ -147,7 +147,7 @@ steps:
                   echo "Terraform planned has failed!"
                   exit 1
               fi
-    name: terraformplan
+    name: terraformplan_bootstrap
 
   - bash: |  
       echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"   
@@ -161,7 +161,7 @@ steps:
       ls -la dev   
       echo show tree
       tree
-    displayName: Show files
+    displayName: Show files _bootstrap
 
     # You can organize pipeline jobs into stages. Stages are the major divisions in a pipeline: 
     #   "build this app", "run these tests", and "deploy to pre-production" are good examples of stages. 
@@ -196,7 +196,7 @@ steps:
                   echo "Terraform apply has failed! THis is else."
                   exit 1
               fi
-    name: terraformapply
+    name: terraformapply_bootstrap
 
         
 
@@ -233,7 +233,7 @@ steps:
         else
           echo "All is fine for tflint to continu for $BRANCH_NAME/${TF_VAR_rstudio_app_name}."
         fi
-    name: tflint
+    name: tflint_rstudio
 
 
   # terraform init
@@ -253,7 +253,7 @@ steps:
         echo "STARTING TERRAFORM INIT"
         TF_IN_AUTOMATION=yes
         $TERRAFORM init
-    name: terraforminit
+    name: terraforminit_rstudio
 
   # teraform plan
   - task: AWSShellScript@1
@@ -286,7 +286,7 @@ steps:
                   echo "Terraform planned has failed!"
                   exit 1
               fi
-    name: terraformplan
+    name: terraformplan_rstudio
 
   - bash: |  
       echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"   
@@ -300,7 +300,7 @@ steps:
       ls -la dev   
       echo show tree
       tree
-    displayName: Show files
+    displayName: Show files _rstudio
 
     # You can organize pipeline jobs into stages. Stages are the major divisions in a pipeline: 
     #   "build this app", "run these tests", and "deploy to pre-production" are good examples of stages. 
@@ -335,4 +335,4 @@ steps:
                   echo "Terraform apply has failed! THis is else."
                   exit 1
               fi
-    name: terraformapply
+    name: terraformapply_rstudio
