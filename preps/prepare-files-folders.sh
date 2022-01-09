@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -e #  Exit immediately if a command exits with a non-zero status.
 #_LIVE_DIR=${LIVE_DIR:=live}
 LIVE_DIR=${LIVEDIR}
 echo var LIVE_DIR is passed through and has value $LIVE_DIR
@@ -42,20 +42,23 @@ if [[ -z "$AWS_REGION" ]]; then
 fi
 if [[ $LIVE_DIR = "live" ]]
 then
+    DIRSOURCE=$LIVE_DIR
     DIRTOCREATE=$_BRANCH_NAME
 else
-    DIRTOCREATE=$LIVE_DIR
+    DIRSOURCE=$LIVE_DIR
+    DIRTOCREATE=${_BRANCH_NAME}/${$TF_VAR_app_name}
 fi 
+echo dir source = $DIRSOURCE
 echo dir to create = $DIRTOCREATE
 
 ##[[ -d "$_BRANCH_NAME" ]] && rm -rf "$_BRANCH_NAME"
 
 mkdir -p "${DIRTOCREATE}"/
 echo DIRTOCREATE dir = ${DIRTOCREATE}
-echo "Copying ${LIVE_DIR} to ${DIRTOCREATE}"
-cp "${LIVE_DIR}"/* "${DIRTOCREATE}"/
+echo "Copying ${DIRSOURCE} to ${DIRTOCREATE}"
+cp "${DIRSOURCE}"/* "${DIRTOCREATE}"/
 echo "Copying tflint configuration file for aws provider"
-cp  "${LIVE_DIR}"/.tflint.hcl "${DIRTOCREATE}"/
+cp  "${DIRSOURCE}"/.tflint.hcl "${DIRTOCREATE}"/
 sed -i.bak 's~AWS_REGION~'"$AWS_REGION"'~' "${DIRTOCREATE}/${_BACKEND_TPL}"
 sed -i.bak 's~APP_NAME~'"$TF_VAR_app_name"'~' "${DIRTOCREATE}/${_BACKEND_TPL}"
 sed -i.bak 's~ENVIRONMENT~'"$_BRANCH_NAME"'~' "${DIRTOCREATE}/${_BACKEND_TPL}"
