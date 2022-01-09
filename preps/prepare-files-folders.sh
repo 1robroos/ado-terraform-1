@@ -10,6 +10,7 @@ echo  TF_VAR_app_name = ${TF_VAR_app_name}
 echo  BRANCH_NAME =  ${BRANCH_NAME}
 echo  TF_VAR_region =  ${TF_VAR_region}
 echo  LIVEDIR = ${LIVEDIR}
+exit 1
 echo
 # echo show git branch but test ADO predefined variable
 # echo 1 THis gives an error $(Build.SourceBranchName)
@@ -40,8 +41,12 @@ if [[ -z "$AWS_REGION" ]]; then
     echo "[ERROR] Must set AWS_REGION environment variable"
     exit 1
 fi
-
-
+# if [[ $LIVE_DIR= "live" ]]
+# then
+#     DIRTOCREATE=$_BRANCH_NAME
+# else
+#     DIRTOCREATE="
+    
 ##[[ -d "$_BRANCH_NAME" ]] && rm -rf "$_BRANCH_NAME"
 mkdir -p "${_BRANCH_NAME}"/
 echo _BRANCH_NAME dir = ${_BRANCH_NAME}
