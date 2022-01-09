@@ -10,7 +10,6 @@ echo  TF_VAR_app_name = ${TF_VAR_app_name}
 echo  BRANCH_NAME =  ${BRANCH_NAME}
 echo  TF_VAR_region =  ${TF_VAR_region}
 echo  LIVEDIR = ${LIVEDIR}
-exit 1
 echo
 # echo show git branch but test ADO predefined variable
 # echo 1 THis gives an error $(Build.SourceBranchName)
