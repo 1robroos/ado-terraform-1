@@ -33,7 +33,7 @@ if [[ -z "$AWS_REGION" ]]; then
 fi
 
 
-[[ -d "$_BRANCH_NAME" ]] && rm -rf "$_BRANCH_NAME"
+##[[ -d "$_BRANCH_NAME" ]] && rm -rf "$_BRANCH_NAME"
 mkdir -p "${_BRANCH_NAME}"/
 echo _BRANCH_NAME dir = ${_BRANCH_NAME}
 echo "Copying ${LIVE_DIR} to ${_BRANCH_NAME}"

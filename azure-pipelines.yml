@@ -86,7 +86,7 @@ steps:
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: 'us-east-1'
+      regionName: $(TF_VAR_region)
       arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
       scriptType: 'inline'
       inlineScript: |
@@ -115,7 +115,7 @@ steps:
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: 'us-east-1'
+      regionName: $(TF_VAR_region)
       arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
       scriptType: 'inline'
       inlineScript: |
@@ -124,7 +124,11 @@ steps:
         export TF_VAR_region=$2
         export BRANCH_NAME=$3
         cd "${BRANCH_NAME}"/ || exit
-        echo pwd is  $PWD        
+        echo pwd is  $PWD   
+        echo show backend file     
+        pwd
+        cat backend.tf
+        echo
         echo "STARTING TERRAFORM INIT"
         TF_IN_AUTOMATION=yes
         $TERRAFORM init
@@ -134,7 +138,7 @@ steps:
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: 'us-east-1'
+      regionName: $(TF_VAR_region)
       arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
       scriptType: 'inline'
       inlineScript: |
@@ -143,6 +147,12 @@ steps:
         export TF_VAR_region=$2
         export BRANCH_NAME=$3
         cd "${BRANCH_NAME}"/ || exit    
+        echo pwd is  $PWD   
+        echo show backend file     
+        pwd
+        cat backend.tf
+        echo
+
         echo "STARTING TERRAFORM PLAN"
         OUTPUT=$($TERRAFORM plan -out="./out_plan_file" -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
               OUT=$?
@@ -164,15 +174,14 @@ steps:
     name: terraformplan_bootstrap
 
   - bash: |  
-      echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(terraformplan.terraform_plan_exitcode)"   
+      echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(terraformplan_bootstrap.terraform_plan_exitcode)"   
     displayName: Show terraform_plan_exitcode in same job
 
   - bash: |  
       echo  SHow files
       pwd
-      ls -la
+      ls -ltR
       echo
-      ls -la dev   
       echo show tree
       tree
     displayName: Show files _bootstrap
@@ -194,6 +203,11 @@ steps:
         #  You can write your script inline here
         echo  SHow output variable terraform_plan_exitcode  is "$(terraformplan_bootstrap.terraform_plan_exitcode)"
         cd "${BRANCH_NAME}"/ || exit  
+        echo pwd is  $PWD   
+        echo show backend file     
+        pwd
+        cat backend.tf
+        echo
         TF_IN_AUTOMATION=yes
               if [ "$(terraformplan_bootstrap.terraform_plan_exitcode)" -eq 0 ];then
                   echo "Terraform apply will not run because terraform plan has no changes."
