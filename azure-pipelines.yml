@@ -31,14 +31,7 @@ trigger:
 - dev
 - stg
 - prd
-# trigger: 
-#   branches: 
-#     include: 
-#     - dev
-#     - stg
-#     # - prd
-# pr:
-# - stg
+
   
 # no PR triggers
 pr: none
