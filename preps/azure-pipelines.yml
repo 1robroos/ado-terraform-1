@@ -2,7 +2,7 @@ steps:
 - script: |
     export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
     export BRANCH_NAME=${{parameters.BRANCH_NAME}}
-    export LIVEDIR==${{parameters.LIVEDIR}}
+    export LIVEDIR=${{parameters.LIVEDIR}}
     echo LIVDIR= $LIVEDIR
     echo TF_VAR_app_name=$TF_VAR_app_name
     
