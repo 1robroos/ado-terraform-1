@@ -40,13 +40,14 @@ if [[ -z "$AWS_REGION" ]]; then
     echo "[ERROR] Must set AWS_REGION environment variable"
     exit 1
 fi
+
 if [[ $LIVE_DIR = "live" ]]
 then
     DIRSOURCE=$LIVE_DIR
     DIRTOCREATE=$_BRANCH_NAME
 else
     DIRSOURCE=$LIVE_DIR
-    DIRTOCREATE=${_BRANCH_NAME}/${$TF_VAR_app_name}
+    DIRTOCREATE=${_BRANCH_NAME}/${TF_VAR_app_name}
 fi 
 echo dir source = $DIRSOURCE
 echo dir to create = $DIRTOCREATE
