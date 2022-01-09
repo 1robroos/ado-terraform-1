@@ -57,7 +57,6 @@ steps:
 # ##########################################################################
 # Prepare rstudio backend
 # ##########################################################################
-steps:
   # prepares files and folders for this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
   - template: preps_rstudio/azure-pipelines.yml
     parameters:
