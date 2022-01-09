@@ -3,6 +3,8 @@ steps:
     export TF_VAR_app_name=${{parameters.TF_VAR_app_name}}
     export BRANCH_NAME=${{parameters.BRANCH_NAME}}
     export LIVEDIR=${{parameters.LIVEDIR}}
+    export TF_VAR_region=${{parameters.TF_VAR_region}}
+
     echo LIVEDIR= $LIVEDIR
     echo TF_VAR_app_name=$TF_VAR_app_name
     

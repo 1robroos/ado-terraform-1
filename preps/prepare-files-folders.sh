@@ -40,7 +40,7 @@ if [[ -z "$AWS_REGION" ]]; then
     echo "[ERROR] Must set AWS_REGION environment variable"
     exit 1
 fi
-if [[ $LIVE_DIR= "live" ]]
+if [[ $LIVE_DIR = "live" ]]
 then
     DIRTOCREATE=$_BRANCH_NAME
 else
