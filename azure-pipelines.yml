@@ -271,7 +271,7 @@ steps:
         export BRANCH_NAME=$3
         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
         echo "STARTING TERRAFORM PLAN"
-        OUTPUT=$($TERRAFORM plan -out="./out_plan_file" -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
+        OUTPUT=$($TERRAFORM plan -out="./rstudio_out_plan_file" -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
               OUT=$?
               echo "##vso[task.setvariable variable=terraformplan_rstudio_exitcode;isOutput=true]$OUT"
               echo "the terraform plan exitcode is $OUT"
@@ -283,7 +283,7 @@ steps:
               elif [ $OUT -eq 2 ];then
                   echo "Changes have been noticed!"
                   echo "Showing the plan file:"
-                  $TERRAFORM show ./out_plan_file
+                  $TERRAFORM show ./rstudio_out_plan_file
               else
                   echo "Terraform planned has failed!"
                   exit 1
@@ -297,9 +297,9 @@ steps:
   - bash: |  
       echo  SHow files
       pwd
-      ls -la
+      echo 
+      echo ls -ltR
       echo
-      ls -la dev   
       echo show tree
       tree
     displayName: Show files _rstudio
@@ -329,10 +329,10 @@ steps:
                   exit 1
               elif [ "$(terraformplan_rstudio.terraformplan_rstudio_exitcode)" -eq 2 ];then
                   echo "Changes have been noticed by terraform plan! I will show you: "
-                  $TERRAFORM show ./out_plan_file
+                  $TERRAFORM show ./rstudio_out_plan_file
                   echo
                   echo "Now apply will run:"
-                  $TERRAFORM apply  -input=false ./out_plan_file
+                  $TERRAFORM apply  -input=false ./rstudio_out_plan_file
               else
                   echo "Terraform apply has failed! THis is else."
                   exit 1
