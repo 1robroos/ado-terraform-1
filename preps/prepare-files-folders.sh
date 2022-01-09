@@ -4,24 +4,33 @@ set -e
 LIVE_DIR=${LIVEDIR}
 echo var LIVE_DIR is passed through and has value $LIVE_DIR
 _BACKEND_TPL=${BACKEND_TPL:=backend.tf.tpl}
+_BRANCH_NAME=${BRANCH_NAME}
 
+echo  TF_VAR_app_name = ${TF_VAR_app_name}
+echo  BRANCH_NAME =  ${BRANCH_NAME}
+echo  TF_VAR_region =  ${TF_VAR_region}
+echo  LIVEDIR = ${LIVEDIR}
+echo
 # echo show git branch but test ADO predefined variable
 # echo 1 THis gives an error $(Build.SourceBranchName)
 echo 2 Predefined variable BUILD_SOURCEBRANCHNAME has value  $BUILD_SOURCEBRANCHNAME
 echo 3 Pass-through variable BRANCH_NAME has value $BRANCH_NAME
 echo "..........................."
 
-if [[ -z "$BRANCH_NAME" ]]; then
-    _BRANCH_NAME=$(git branch --show-current)
-     echo if loop 
-     echo get git branch
-     git branch --show-current
-else
-    _BRANCH_NAME=${BRANCH_NAME}
+# if [[ -z "$BRANCH_NAME" ]]; then
+#     _BRANCH_NAME=$(git branch --show-current)
+#      echo if loop 
+#      echo get git branch
+#      git branch --show-current
+# else
+#     _BRANCH_NAME=${BRANCH_NAME}
+# fi
+
+# _BRANCH_NAME=${_BRANCH_NAME//\//-}
+if [[ -z "$_BRANCH_NAME" ]]; then
+    echo "[ERROR] Must set _BRANCH_NAME environment variable"
+    exit 1
 fi
-
-_BRANCH_NAME=${_BRANCH_NAME//\//-}
-
 if [[ -z "$TF_VAR_app_name" ]]; then
     echo "[ERROR] Must set TF_VAR_app_name environment variable"
     exit 1
