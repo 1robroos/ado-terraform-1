@@ -41,7 +41,10 @@ if [[ -z "$AWS_REGION" ]]; then
     echo "[ERROR] Must set AWS_REGION environment variable"
     exit 1
 fi
-
+echo debug check ls  from branch  dir
+echo " ls -l ${_BRANCH_NAME}"
+ls -l ${_BRANCH_NAME}
+echo
 
 [[ -d "$_BRANCH_NAME" ]] && rm -rf "$_BRANCH_NAME"
 mkdir -p "${_BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/
