@@ -1,0 +1,55 @@
+steps:
+- script: |
+    export TF_VAR_rstudio_app_name=${{parameters.TF_VAR_rstudio_app_name}}
+    export BRANCH_NAME=${{parameters.BRANCH_NAME}}
+    echo TF_VAR_rstudio_app_name=$TF_VAR_rstudio_app_name
+    echo "Create subfolder for $BRANCH_NAME and copy teraform files from live dir into it."
+    echo " then substitute AWS_REGION, APP_NAME and ENVIRONMENT ( which is BRANCH_NAME) in backend.tf.tpl because terraform does not allow variables in backend.tf"
+    echo "These terraform files hold the code for the resources you want to deploy."
+    preps_rstudio/prepare-files-folders.sh
+  displayName: 'script-prepare-files-folders'    
+
+
+
+#'Parameters: [Environment, AppName] must have values',
+# Optional path to an existing file containing the template parameters in JSON or YAML format. If your template does not require parameters leave the field empty.
+# CloudFormation expects the file to contain an array of one or more parameter objects. Each object specifies the name of the parameter as ParameterKey and the corresponding value in ParameterValue. For example (in JSON format):
+
+# [
+# 	{
+# 		"ParameterKey":"parameter1",
+# 		"ParameterValue":"parameter1value"},
+# 	{
+# 		"ParameterKey":"parameter2",
+# 		"ParameterValue":"parameter2value"}
+# ]```
+
+# calling templateParametersFile does not work when the parameter values refer to variables used in the pipeline, like ParameterValue: ${{parameters.TF_VAR_rstudio_app_name}}
+#cloudformation gives: User: arn:aws:iam::969526043371:user/AzureDevOpsIamUser is not authorized to perform: dynamodb:DescribeTable on resource: arn:aws:dynamodb:us-east-1:969526043371:table/${{parameters.TF_VAR_rstudio_app_name}}-state-lock-${{parameters.BRANCH_NAME}} (Service: AmazonDynamoDBv2; Status Code: 400; Error Code: AccessDeniedException; Request ID:
+
+# - task: CloudFormationCreateOrUpdateStack@1
+#   inputs:
+#     awsCredentials: 'aws-AzureDevopsiamuser'
+#     regionName: 'us-east-1'
+#     stackName: 'kfsol-dev-app'
+#     templateSource: 'file'
+#     templateFile: 'cloudformation/cfn-tfbackend.yml'
+#     templateParametersFile: 'cloudformation/parameters.json'
+#     #useChangeSet: true
+# #     changeSetName: 'csname'
+
+# Here the backend ( S3  bucket for terraform .state file and dynamodb table ) will be created 
+# this works: use the cloudformation parameter substitution with inline parameters:
+- task: CloudFormationCreateOrUpdateStack@1
+  inputs:
+    awsCredentials: 'aws-AzureDevopsiamuser'
+    regionName: 'us-east-1'
+    stackName: '${{parameters.TF_VAR_rstudio_app_name}}-${{parameters.BRANCH_NAME}}'
+    templateSource: 'file'
+    templateFile: 'cloudformation/cfn-tfbackend.yml'
+    templateParametersSource: 'inline'
+    templateParameters: |
+      - ParameterKey: AppName
+        ParameterValue: ${{parameters.TF_VAR_rstudio_app_name}}
+      - ParameterKey: Environment
+        ParameterValue: ${{parameters.BRANCH_NAME}}
