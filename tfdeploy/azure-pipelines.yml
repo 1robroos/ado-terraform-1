@@ -30,8 +30,8 @@ steps:
         cd "${BRANCH_NAME}"/ || exit
       else
         echo livedir var is not live
-        echo cahnge dir to "${BRANCH_NAME}/${TF_VAR_app_name}"
-        cd "${BRANCH_NAME}/${TF_VAR_app_name}" || exit
+        echo cahnge dir to "$(BRANCH_NAME)/$(TF_VAR_app_name)"
+        cd "$(BRANCH_NAME)/$(TF_VAR_app_name)" || exit
       fi
       echo pwd is $PWD        
       echo "STARTING tflint"
