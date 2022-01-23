@@ -61,7 +61,7 @@ steps:
       echo "STARTING TERRAFORM INIT"
       TF_IN_AUTOMATION=yes
       $TERRAFORM init
-  name: tfinit_bootstrap
+    displayname: tfinit_bootstrap
 
 # teraform plan
 - task: AWSShellScript@1
@@ -102,7 +102,7 @@ steps:
                 echo "Terraform planned has failed!"
                 exit 1
             fi
-  name: tfplan_bootstrap
+    displayname: tfplan_bootstrap
 
 - bash: |  
     echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(tfplan_bootstrap.terraform_plan_exitcode)"   
@@ -155,4 +155,4 @@ steps:
                 echo "Terraform apply has failed! THis is else."
                 exit 1
             fi
-  name: tfapply_bootstrap
+    displayname: tfapply_bootstrap
