@@ -80,155 +80,163 @@ steps:
 # TERRAFORM BOOTSTRAP RESOURCES 
 ##########
 
-# ##########################################################################
-# From here the terraform actions take place which deploys your resources
-# Deploy resource in bootstrap
-# ##########################################################################
-  # Let's lint before doing anything further that consumes unneeded energy.
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: $(TF_VAR_region)
-      arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
-      scriptType: 'inline'
-      inlineScript: |
-        echo args are $1 $2 $3
-        export TF_VAR_app_name=$1
-        export TF_VAR_region=$2
-        export BRANCH_NAME=$3
-        cd "${BRANCH_NAME}"/ || exit
-        echo pwd is $PWD        
-        echo "STARTING tflint for checking scripts in dir $BRANCH_NAME "
-        ls -la
-        echo
-        ./tflint --init
-        RCLINT=$?
-        if [ $RCLINT != 0 ]
-        then
-          echo "tflint reports an error"
-          exit 1
-        else
-          echo "All is fine for tflint to continu."
-        fi
-    name: tflint_bootstrap
+  - template: tfdeploy/azure-pipelines.yml
+    parameters:
+      TF_VAR_app_name: $(TF_VAR_app_name)
+      BRANCH_NAME: $(BRANCH_NAME)
+      TF_VAR_region: $(TF_VAR_region)
+      LIVEDIR: $(LIVEDIR)
 
 
-  # terraform init
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: $(TF_VAR_region)
-      arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
-      scriptType: 'inline'
-      inlineScript: |
-        echo args are $1 $2 $3
-        export TF_VAR_app_name=$1
-        export TF_VAR_region=$2
-        export BRANCH_NAME=$3
-        cd "${BRANCH_NAME}"/ || exit
-        echo pwd is  $PWD   
-        echo show backend file     
-        pwd
-        cat backend.tf
-        echo
-        echo "STARTING TERRAFORM INIT"
-        TF_IN_AUTOMATION=yes
-        $TERRAFORM init
-    name: tfinit_bootstrap
-
-  # teraform plan
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: $(TF_VAR_region)
-      arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
-      scriptType: 'inline'
-      inlineScript: |
-        echo args are $1 $2 $3
-        export TF_VAR_app_name=$1
-        export TF_VAR_region=$2
-        export BRANCH_NAME=$3
-        cd "${BRANCH_NAME}"/ || exit    
-        echo pwd is  $PWD   
-        echo show backend file     
-        pwd
-        cat backend.tf
-        echo
-        echo show terraform resources
-        $TERRAFORM state list
-        echo
-        echo "STARTING TERRAFORM PLAN"
-        OUTPUT=$($TERRAFORM plan -out="./out_plan_file" -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
-              OUT=$?
-              echo "##vso[task.setvariable variable=terraform_plan_exitcode;isOutput=true]$OUT"
-              echo "the terraform plan exitcode is $OUT"
-              if [ $OUT -eq 0 ];then
-                  echo "No changes. Infrastructure is up-to-date!"
-              elif [ $OUT -eq 1 ];then
-                  echo "Terraform planned has failed!"
-                  exit 1
-              elif [ $OUT -eq 2 ];then
-                  echo "Changes have been noticed!"
-                  echo "Showing the plan file:"
-                  $TERRAFORM show ./out_plan_file
-              else
-                  echo "Terraform planned has failed!"
-                  exit 1
-              fi
-    name: tfplan_bootstrap
-
-  - bash: |  
-      echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(tfplan_bootstrap.terraform_plan_exitcode)"   
-    displayName: Show terraform_plan_exitcode in same job
-
-  - bash: |  
-      echo  SHow files
-      pwd
-      ls -ltR
-      echo
-      echo show tree
-      tree
-    displayName: Show files _bootstrap
-
-    # You can organize pipeline jobs into stages. Stages are the major divisions in a pipeline: 
-    #   "build this app", "run these tests", and "deploy to pre-production" are good examples of stages. 
-    # They are logical boundaries in your pipeline where you can pause the pipeline and perform various checks.
-    # Every pipeline has at least one stage even if you do not explicitly define it. 
-    # You can also arrange stages into a dependency graph so that one stage runs before another one. There is a limit of 256 jobs for a stage.
+# # ##########################################################################
+# # From here the terraform actions take place which deploys your resources
+# # Deploy resource in bootstrap
+# # ##########################################################################
+#   # Let's lint before doing anything further that consumes unneeded energy.
+#   - task: AWSShellScript@1
+#     inputs:
+#       awsCredentials: 'aws-AzureDevopsiamuser'
+#       regionName: $(TF_VAR_region)
+#       arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
+#       scriptType: 'inline'
+#       inlineScript: |
+#         echo args are $1 $2 $3
+#         export TF_VAR_app_name=$1
+#         export TF_VAR_region=$2
+#         export BRANCH_NAME=$3
+#         cd "${BRANCH_NAME}"/ || exit
+#         echo pwd is $PWD        
+#         echo "STARTING tflint for checking scripts in dir $BRANCH_NAME "
+#         ls -la
+#         echo
+#         ./tflint --init
+#         RCLINT=$?
+#         if [ $RCLINT != 0 ]
+#         then
+#           echo "tflint reports an error"
+#           exit 1
+#         else
+#           echo "All is fine for tflint to continu."
+#         fi
+#     name: tflint_bootstrap
 
 
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'aws-AzureDevopsiamuser'
-      regionName: $(TF_VAR_region) # was per ongeluk 'eu-central-1'
-      arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
-      scriptType: 'inline'
-      inlineScript: |
-        #  You can write your script inline here
-        echo  SHow output variable terraform_plan_exitcode  is "$(tfplan_bootstrap.terraform_plan_exitcode)"
-        cd "${BRANCH_NAME}"/ || exit  
-        echo pwd is  $PWD   
-        echo show backend file     
-        pwd
-        cat backend.tf
-        echo
-        TF_IN_AUTOMATION=yes
-              if [ "$(tfplan_bootstrap.terraform_plan_exitcode)" -eq 0 ];then
-                  echo "Terraform apply will not run because terraform plan has no changes."
-              elif [ "$(tfplan_bootstrap.terraform_plan_exitcode)" -eq 1 ];then
-                  echo "Terraform apply will not run because terraform plan has failed!"
-                  exit 1
-              elif [ "$(tfplan_bootstrap.terraform_plan_exitcode)" -eq 2 ];then
-                  echo "Changes have been noticed by terraform plan! I will show you: "
-                  $TERRAFORM show ./out_plan_file
-                  echo
-                  echo "Now apply will run:"
-                  $TERRAFORM apply  -input=false ./out_plan_file
-              else
-                  echo "Terraform apply has failed! THis is else."
-                  exit 1
-              fi
-    name: tfapply_bootstrap
+#   # terraform init
+#   - task: AWSShellScript@1
+#     inputs:
+#       awsCredentials: 'aws-AzureDevopsiamuser'
+#       regionName: $(TF_VAR_region)
+#       arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
+#       scriptType: 'inline'
+#       inlineScript: |
+#         echo args are $1 $2 $3
+#         export TF_VAR_app_name=$1
+#         export TF_VAR_region=$2
+#         export BRANCH_NAME=$3
+#         cd "${BRANCH_NAME}"/ || exit
+#         echo pwd is  $PWD   
+#         echo show backend file     
+#         pwd
+#         cat backend.tf
+#         echo
+#         echo "STARTING TERRAFORM INIT"
+#         TF_IN_AUTOMATION=yes
+#         $TERRAFORM init
+#     name: tfinit_bootstrap
+
+#   # teraform plan
+#   - task: AWSShellScript@1
+#     inputs:
+#       awsCredentials: 'aws-AzureDevopsiamuser'
+#       regionName: $(TF_VAR_region)
+#       arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
+#       scriptType: 'inline'
+#       inlineScript: |
+#         echo args are $1 $2 $3
+#         export TF_VAR_app_name=$1
+#         export TF_VAR_region=$2
+#         export BRANCH_NAME=$3
+#         cd "${BRANCH_NAME}"/ || exit    
+#         echo pwd is  $PWD   
+#         echo show backend file     
+#         pwd
+#         cat backend.tf
+#         echo
+#         echo show terraform resources
+#         $TERRAFORM state list
+#         echo
+#         echo "STARTING TERRAFORM PLAN"
+#         OUTPUT=$($TERRAFORM plan -out="./out_plan_file" -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
+#               OUT=$?
+#               echo "##vso[task.setvariable variable=terraform_plan_exitcode;isOutput=true]$OUT"
+#               echo "the terraform plan exitcode is $OUT"
+#               if [ $OUT -eq 0 ];then
+#                   echo "No changes. Infrastructure is up-to-date!"
+#               elif [ $OUT -eq 1 ];then
+#                   echo "Terraform planned has failed!"
+#                   exit 1
+#               elif [ $OUT -eq 2 ];then
+#                   echo "Changes have been noticed!"
+#                   echo "Showing the plan file:"
+#                   $TERRAFORM show ./out_plan_file
+#               else
+#                   echo "Terraform planned has failed!"
+#                   exit 1
+#               fi
+#     name: tfplan_bootstrap
+
+#   - bash: |  
+#       echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(tfplan_bootstrap.terraform_plan_exitcode)"   
+#     displayName: Show terraform_plan_exitcode in same job
+
+#   - bash: |  
+#       echo  SHow files
+#       pwd
+#       ls -ltR
+#       echo
+#       echo show tree
+#       tree
+#     displayName: Show files _bootstrap
+
+#     # You can organize pipeline jobs into stages. Stages are the major divisions in a pipeline: 
+#     #   "build this app", "run these tests", and "deploy to pre-production" are good examples of stages. 
+#     # They are logical boundaries in your pipeline where you can pause the pipeline and perform various checks.
+#     # Every pipeline has at least one stage even if you do not explicitly define it. 
+#     # You can also arrange stages into a dependency graph so that one stage runs before another one. There is a limit of 256 jobs for a stage.
+
+
+#   - task: AWSShellScript@1
+#     inputs:
+#       awsCredentials: 'aws-AzureDevopsiamuser'
+#       regionName: $(TF_VAR_region) # was per ongeluk 'eu-central-1'
+#       arguments: '$(TF_VAR_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
+#       scriptType: 'inline'
+#       inlineScript: |
+#         #  You can write your script inline here
+#         echo  SHow output variable terraform_plan_exitcode  is "$(tfplan_bootstrap.terraform_plan_exitcode)"
+#         cd "${BRANCH_NAME}"/ || exit  
+#         echo pwd is  $PWD   
+#         echo show backend file     
+#         pwd
+#         cat backend.tf
+#         echo
+#         TF_IN_AUTOMATION=yes
+#               if [ "$(tfplan_bootstrap.terraform_plan_exitcode)" -eq 0 ];then
+#                   echo "Terraform apply will not run because terraform plan has no changes."
+#               elif [ "$(tfplan_bootstrap.terraform_plan_exitcode)" -eq 1 ];then
+#                   echo "Terraform apply will not run because terraform plan has failed!"
+#                   exit 1
+#               elif [ "$(tfplan_bootstrap.terraform_plan_exitcode)" -eq 2 ];then
+#                   echo "Changes have been noticed by terraform plan! I will show you: "
+#                   $TERRAFORM show ./out_plan_file
+#                   echo
+#                   echo "Now apply will run:"
+#                   $TERRAFORM apply  -input=false ./out_plan_file
+#               else
+#                   echo "Terraform apply has failed! THis is else."
+#                   exit 1
+#               fi
+#     name: tfapply_bootstrap
 
         
 
