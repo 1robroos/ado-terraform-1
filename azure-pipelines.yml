@@ -62,6 +62,17 @@ stages:
             BRANCH_NAME: $(BRANCH_NAME)
             TF_VAR_region: $(TF_VAR_region)
             LIVEDIR: $(LIVEDIR)
+      - job: bsresources
+        displayName: bsresources
+        steps: 
+        - template: tfdeploy/azure-pipelines.yml
+          parameters:
+            TF_VAR_app_name: $(TF_VAR_app_name)
+            BRANCH_NAME: $(BRANCH_NAME)
+            TF_VAR_region: $(TF_VAR_region)
+            LIVEDIR: $(LIVEDIR)
+
+
 
 
 # ##########################################################################
@@ -80,6 +91,18 @@ stages:
             TF_VAR_region: $(TF_VAR_region)
             LIVEDIR: $(LIVEDIR)_$(TF_VAR_rstudio_app_name)  # where the rstudio source terraform code lives. live_rstudio
 
+    jobs:
+      - job: rstudioresources
+        displayName: rstudioresources
+        steps: 
+        - template: tfdeploy/azure-pipelines.yml
+          parameters:
+            TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
+            BRANCH_NAME: $(BRANCH_NAME)
+            TF_VAR_region: $(TF_VAR_region)
+            LIVEDIR: $(LIVEDIR)_${TF_VAR_rstudio_app_name}
+
+        
 #######################
 # END OF BACKENDS PREPS
 #######################
@@ -89,20 +112,10 @@ stages:
 ##########
 # TERRAFORM BOOTSTRAP RESOURCES 
 ##########
-  - stage: bsresources
-  # prepares files and folders for rstudio in this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
-    jobs:
-      - job: bsresources
-        displayName: bsresources
-        steps: 
-        - template: tfdeploy/azure-pipelines.yml
-          parameters:
-            TF_VAR_app_name: $(TF_VAR_app_name)
-            BRANCH_NAME: $(BRANCH_NAME)
-            TF_VAR_region: $(TF_VAR_region)
-            LIVEDIR: $(LIVEDIR)
+  # - stage: bsresources
+  # # prepares files and folders for rstudio in this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
+  #   jobs:
 
-  
 
 # ##########################################################################
 # Deploy rstudio code
@@ -115,19 +128,8 @@ stages:
   #     TF_VAR_region: $(TF_VAR_region)
   #     LIVEDIR: $(LIVEDIR)_${TF_VAR_rstudio_app_name}
 
-  - stage: rstudioresources
+  #- stage: rstudioresources
     # prepares files and folders for rstudio in this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
-    jobs:
-      - job: rstudioresources
-        displayName: rstudioresources
-        steps: 
-        - template: tfdeploy/azure-pipelines.yml
-          parameters:
-            TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
-            BRANCH_NAME: $(BRANCH_NAME)
-            TF_VAR_region: $(TF_VAR_region)
-            LIVEDIR: $(LIVEDIR)_${TF_VAR_rstudio_app_name}
-
 # # ##########################################################################
 # # From here the terraform actions take place which deploys your resources
 # # ##########################################################################
