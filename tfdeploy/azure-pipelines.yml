@@ -18,7 +18,7 @@ steps:
       export TF_VAR_region=${{parameters.TF_VAR_region}}
 
       echo LIVEDIR= $LIVEDIR
-      echo TF_VAR_app_name=$TF_VAR_app_name   #rstudio
+      echo var TF_VAR_app_name=$TF_VAR_app_name   #rstudio
       #echo TF_VAR_app_name=$(TF_VAR_app_name)  # kfsolapp
       echo args are $1 $2 $3
       export TF_VAR_app_name=$1
@@ -31,6 +31,7 @@ steps:
         cd "${BRANCH_NAME}"/ || exit
       else
         echo livedir var is not live
+        echo var TF_VAR_app_name=$TF_VAR_app_name
         echo cahnge dir to $(BRANCH_NAME)/$TF_VAR_app_name
         cd $(BRANCH_NAME)/$TF_VAR_app_name || exit
       fi
