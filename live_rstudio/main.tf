@@ -54,7 +54,7 @@ module "ec2_instance_rstudio" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = local.ec2_type
   monitoring             = true
-  vpc_security_group_ids = [aws_security_group.zomaar_rstudio_SG]
+  vpc_security_group_ids = [aws_security_group.zomaar_rstudio_SG.id]
 
   tags = {
     Terraform   = "true"
