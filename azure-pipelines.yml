@@ -364,7 +364,7 @@ steps:
     name: tfplan_rstudio
 
   - bash: |  
-      echo  SHow IN SAME JOB the output variable rstudio terraform_plan_exitcode  is "$(tfplan_rstudio.terraform_plan_exitcode)"   
+      echo  SHow IN SAME JOB the output variable rstudio tfplan_exitcode  is "$(tfplan_rstudio.tfplan_rstudio_exitcode)"   
     displayName: Show rstudio terraform_plan_exitcode in same job
 
   - bash: |  
@@ -394,6 +394,10 @@ steps:
         #  You can write your script inline here
         echo  SHow output variable rstudio  tfplan_rstudio_exitcode  is "$(tfplan_rstudio.tfplan_rstudio_exitcode)"
         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
+        echo pwd is now
+        pwd
+        echo and files are
+        ls -l 
         TF_IN_AUTOMATION=yes
               if [ "$(tfplan_rstudio.tfplan_rstudio_exitcode)" -eq 0 ];then
                   echo "Terraform apply will not run because terraform plan has no changes."

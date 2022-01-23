@@ -49,7 +49,7 @@ module "ec2_instance_rstudio_2" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 3.0"
 
-  name = "checkov-single-instance_rstudio_${var.environment}"
+  name = "checkov2-single-instance_rstudio_${var.environment}"
 
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = local.ec2_type
