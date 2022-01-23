@@ -23,9 +23,16 @@ steps:
       export TF_VAR_app_name=$1
       export TF_VAR_region=$2
       export BRANCH_NAME=$3
-      cd "${BRANCH_NAME}"/ || exit
+
+      if [[ $LIVE_DIR = "live" ]]
+      then
+        cd "${BRANCH_NAME}"/ || exit
+      else
+        cd "${BRANCH_NAME}"/${TF_VAR_app_name} || exit
+      fi
       echo pwd is $PWD        
-      echo "STARTING tflint for checking scripts in dir $BRANCH_NAME "
+      echo "STARTING tflint"
+      # for checking scripts in dir $BRANCH_NAME "
       ls -la
       echo
       ./tflint --init
