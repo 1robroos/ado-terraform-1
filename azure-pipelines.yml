@@ -299,7 +299,7 @@ steps:
         # fi
     name: checkov_rstudio
 
-  # terraform init
+  # terraform init rstudio
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-AzureDevopsiamuser'

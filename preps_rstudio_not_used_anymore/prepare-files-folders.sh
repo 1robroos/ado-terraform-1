@@ -3,32 +3,13 @@ set -e
 _LIVE_DIR=${LIVE_DIR:=live_rstudio}
 _BACKEND_TPL=${BACKEND_TPL:=backend.tf.tpl}
 
-# echo before if loop
-# echo var BRANCH_NAME is $BRANCH_NAME
-# echo 
-# echo show git show-branch 
-# git show-branch
-# echo "..........................."
-# echo 
-# echo show git branch
-# git branch
-# echo "..........................."
 
-# echo 
 # echo show git branch but test ADO predefined variable
 # echo 1 THis gives an error $(Build.SourceBranchName)
 echo 2 Predefined variable BUILD_SOURCEBRANCHNAME has value  $BUILD_SOURCEBRANCHNAME
 echo 3 Pass-through variable BRANCH_NAME has value $BRANCH_NAME
 echo "..........................."
 
-if [[ -z "$BRANCH_NAME" ]]; then
-    _BRANCH_NAME=$(git branch --show-current)
-     echo if loop 
-     echo get git branch
-     git branch --show-current
-else
-    _BRANCH_NAME=${BRANCH_NAME}
-fi
 
 _BRANCH_NAME=${_BRANCH_NAME//\//-}
 

@@ -17,16 +17,7 @@ echo 2 Predefined variable BUILD_SOURCEBRANCHNAME has value  $BUILD_SOURCEBRANCH
 echo 3 Pass-through variable BRANCH_NAME has value $BRANCH_NAME
 echo "..........................."
 
-# if [[ -z "$BRANCH_NAME" ]]; then
-#     _BRANCH_NAME=$(git branch --show-current)
-#      echo if loop 
-#      echo get git branch
-#      git branch --show-current
-# else
-#     _BRANCH_NAME=${BRANCH_NAME}
-# fi
 
-# _BRANCH_NAME=${_BRANCH_NAME//\//-}
 if [[ -z "$_BRANCH_NAME" ]]; then
     echo "[ERROR] Must set _BRANCH_NAME environment variable"
     exit 1
