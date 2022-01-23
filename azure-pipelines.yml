@@ -12,7 +12,7 @@ parameters:
 
 variables:
   - name: System.Debug
-    value: true  
+    value: false  
   - name: TF_VAR_app_name
     value: "kfsolapp"
   - name: vmImageName
@@ -77,7 +77,7 @@ steps:
 
 
 ##########
-# TERRAFORM BOOTSTAP RESOURCES 
+# TERRAFORM BOOTSTRAP RESOURCES 
 ##########
 
 # ##########################################################################
@@ -134,7 +134,7 @@ steps:
         echo "STARTING TERRAFORM INIT"
         TF_IN_AUTOMATION=yes
         $TERRAFORM init
-    name: terraforminit_bootstrap
+    name: tfinit_bootstrap
 
   # teraform plan
   - task: AWSShellScript@1
@@ -175,10 +175,10 @@ steps:
                   echo "Terraform planned has failed!"
                   exit 1
               fi
-    name: terraformplan_bootstrap
+    name: tfplan_bootstrap
 
   - bash: |  
-      echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(terraformplan_bootstrap.terraform_plan_exitcode)"   
+      echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(tfplan_bootstrap.terraform_plan_exitcode)"   
     displayName: Show terraform_plan_exitcode in same job
 
   - bash: |  
@@ -205,7 +205,7 @@ steps:
       scriptType: 'inline'
       inlineScript: |
         #  You can write your script inline here
-        echo  SHow output variable terraform_plan_exitcode  is "$(terraformplan_bootstrap.terraform_plan_exitcode)"
+        echo  SHow output variable terraform_plan_exitcode  is "$(tfplan_bootstrap.terraform_plan_exitcode)"
         cd "${BRANCH_NAME}"/ || exit  
         echo pwd is  $PWD   
         echo show backend file     
@@ -213,12 +213,12 @@ steps:
         cat backend.tf
         echo
         TF_IN_AUTOMATION=yes
-              if [ "$(terraformplan_bootstrap.terraform_plan_exitcode)" -eq 0 ];then
+              if [ "$(tfplan_bootstrap.terraform_plan_exitcode)" -eq 0 ];then
                   echo "Terraform apply will not run because terraform plan has no changes."
-              elif [ "$(terraformplan_bootstrap.terraform_plan_exitcode)" -eq 1 ];then
+              elif [ "$(tfplan_bootstrap.terraform_plan_exitcode)" -eq 1 ];then
                   echo "Terraform apply will not run because terraform plan has failed!"
                   exit 1
-              elif [ "$(terraformplan_bootstrap.terraform_plan_exitcode)" -eq 2 ];then
+              elif [ "$(tfplan_bootstrap.terraform_plan_exitcode)" -eq 2 ];then
                   echo "Changes have been noticed by terraform plan! I will show you: "
                   $TERRAFORM show ./out_plan_file
                   echo
@@ -228,7 +228,7 @@ steps:
                   echo "Terraform apply has failed! THis is else."
                   exit 1
               fi
-    name: terraformapply_bootstrap
+    name: tfapply_bootstrap
 
         
 
@@ -268,6 +268,36 @@ steps:
     name: tflint_rstudio
 
 
+    # try checkov
+    - task: AWSShellScript@1
+      inputs:
+        awsCredentials: 'aws-AzureDevopsiamuser'
+        regionName: $(TF_VAR_region)
+        arguments: '$(TF_VAR_rstudio_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
+        scriptType: 'inline'
+        inlineScript: |
+          echo args are $1 $2 $3
+          export TF_VAR_rstudio_app_name=$1
+          export TF_VAR_region=$2
+          export BRANCH_NAME=$3
+          cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
+          echo pwd is $PWD        
+          echo "STARTING checkov for checking scripts in dir $BRANCH_NAME/${TF_VAR_rstudio_app_name} "
+          ls -la
+          echo install with pip install checkov
+          pip install checkov
+
+          checkov -d .
+          # RCLINT=$?
+          # if [ $RCLINT != 0 ]
+          # then
+          #   echo "tflint reports an error in $BRANCH_NAME/${TF_VAR_rstudio_app_name}"
+          #   exit 1
+          # else
+          #   echo "All is fine for tflint to continu for $BRANCH_NAME/${TF_VAR_rstudio_app_name}."
+          # fi
+      name: checkov_rstudio
+
   # terraform init
   - task: AWSShellScript@1
     inputs:
@@ -285,7 +315,7 @@ steps:
         echo "STARTING TERRAFORM INIT"
         TF_IN_AUTOMATION=yes
         $TERRAFORM init
-    name: terraforminit_rstudio
+    name: tfinit_rstudio
 
   # teraform plan rstudio
   - task: AWSShellScript@1
@@ -302,15 +332,16 @@ steps:
         export TF_VAR_region=$2
         export BRANCH_NAME=$3
         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
+        pwd
 
         echo show terraform resources
         $TERRAFORM state list
         echo
-        
+
         echo "STARTING TERRAFORM PLAN"
         OUTPUT=$($TERRAFORM plan -out="./rstudio_out_plan_file" -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
               OUT=$?
-              echo "##vso[task.setvariable variable=terraformplan_rstudio_exitcode;isOutput=true]$OUT"
+              echo "##vso[task.setvariable variable=tfplan_rstudio_exitcode;isOutput=true]$OUT"
               echo "the terraform plan exitcode is $OUT"
               if [ $OUT -eq 0 ];then
                   echo "No changes. Infrastructure is up-to-date!"
@@ -319,16 +350,20 @@ steps:
                   exit 1
               elif [ $OUT -eq 2 ];then
                   echo "Changes have been noticed!"
+                  echo Current dir is 
+                  pwd
+                  echo
                   echo "Showing the plan file:"
+
                   $TERRAFORM show ./rstudio_out_plan_file
               else
                   echo "Terraform planned has failed!"
                   exit 1
               fi
-    name: terraformplan_rstudio
+    name: tfplan_rstudio
 
   - bash: |  
-      echo  SHow IN SAME JOB the output variable rstudio terraform_plan_exitcode  is "$(terraformplan_rstudio.terraform_plan_exitcode)"   
+      echo  SHow IN SAME JOB the output variable rstudio terraform_plan_exitcode  is "$(tfplan_rstudio.terraform_plan_exitcode)"   
     displayName: Show rstudio terraform_plan_exitcode in same job
 
   - bash: |  
@@ -356,22 +391,24 @@ steps:
       scriptType: 'inline'
       inlineScript: |
         #  You can write your script inline here
-        echo  SHow output variable rstudio  terraformplan_rstudio_exitcode  is "$(terraformplan_rstudio.terraformplan_rstudio_exitcode)"
+        echo  SHow output variable rstudio  tfplan_rstudio_exitcode  is "$(tfplan_rstudio.tfplan_rstudio_exitcode)"
         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
         TF_IN_AUTOMATION=yes
-              if [ "$(terraformplan_rstudio.terraformplan_rstudio_exitcode)" -eq 0 ];then
+              if [ "$(tfplan_rstudio.tfplan_rstudio_exitcode)" -eq 0 ];then
                   echo "Terraform apply will not run because terraform plan has no changes."
-              elif [ "$(terraformplan_rstudio.terraformplan_rstudio_exitcode)" -eq 1 ];then
+              elif [ "$(tfplan_rstudio.tfplan_rstudio_exitcode)" -eq 1 ];then
                   echo "Terraform apply will not run because terraform plan has failed!"
                   exit 1
-              elif [ "$(terraformplan_rstudio.terraformplan_rstudio_exitcode)" -eq 2 ];then
+              elif [ "$(tfplan_rstudio.tfplan_rstudio_exitcode)" -eq 2 ];then
                   echo "Changes have been noticed by terraform plan! I will show you: "
-                  $TERRAFORM show ./rstudio/rstudio_out_plan_file
+                  pwd
+                  ls -l
+                  $TERRAFORM show ./rstudio_out_plan_file
                   echo
                   echo "Now apply will run:"
-                  $TERRAFORM apply  -input=false ./rstudio/rstudio_out_plan_file
+                  $TERRAFORM apply  -input=false ./rstudio_out_plan_file
               else
                   echo "Terraform apply has failed! THis is else."
                   exit 1
               fi
-    name: terraformapply_rstudio
+    name: tfapply_rstudio
