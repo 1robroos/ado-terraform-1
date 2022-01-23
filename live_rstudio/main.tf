@@ -61,3 +61,4 @@ module "ec2_instance_rstudio" {
     Environment = var.environment
   }
 }
+
