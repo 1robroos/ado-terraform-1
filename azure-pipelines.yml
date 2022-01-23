@@ -287,7 +287,7 @@ steps:
         echo install with pip install checkov
         pip install checkov
 
-        checkov -d .
+        checkov -s -d .
         # RCLINT=$?
         # if [ $RCLINT != 0 ]
         # then
