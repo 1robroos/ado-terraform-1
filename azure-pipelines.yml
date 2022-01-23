@@ -45,30 +45,40 @@ pool:
 # BACKENDS
 ##########
 
+stages:
+  - stage: backendbootstrap
 # ##########################################################################
 # Prepare bootstrap backend, with a ADO template ( https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references ) 
 # ##########################################################################
-steps:
-  # prepares files and folders for this stage and 
-  # prepares aws S3 buckets for terraform state file with Cloudformation.
-  - template: preps/azure-pipelines.yml
-    parameters:
-      TF_VAR_app_name: $(TF_VAR_app_name)
-      BRANCH_NAME: $(BRANCH_NAME)
-      TF_VAR_region: $(TF_VAR_region)
-      LIVEDIR: $(LIVEDIR)
+    jobs:
+      - job: backendbootstrap
+        displayName: backendbootstrap
+        steps: 
+        # prepares files and folders for this stage and 
+        # prepares aws S3 buckets for terraform state file with Cloudformation.
+        - template: preps/azure-pipelines.yml
+          parameters:
+            TF_VAR_app_name: $(TF_VAR_app_name)
+            BRANCH_NAME: $(BRANCH_NAME)
+            TF_VAR_region: $(TF_VAR_region)
+            LIVEDIR: $(LIVEDIR)
 
 
 # ##########################################################################
 # Prepare rstudio backend
 # ##########################################################################
-  # prepares files and folders for rstudio in this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
-  - template: preps/azure-pipelines.yml
-    parameters:
-      TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
-      BRANCH_NAME: $(BRANCH_NAME)
-      TF_VAR_region: $(TF_VAR_region)
-      LIVEDIR: $(LIVEDIR)_$(TF_VAR_rstudio_app_name)  # where the rstudio source terraform code lives. live_rstudio
+  - stage: backendrstudio
+    # prepares files and folders for rstudio in this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
+    jobs:
+      - job: backendrstudio
+        displayName: backendrstudio
+        steps: 
+        - template: preps/azure-pipelines.yml
+            parameters:
+              TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
+              BRANCH_NAME: $(BRANCH_NAME)
+              TF_VAR_region: $(TF_VAR_region)
+              LIVEDIR: $(LIVEDIR)_$(TF_VAR_rstudio_app_name)  # where the rstudio source terraform code lives. live_rstudio
 
 #######################
 # END OF BACKENDS PREPS
@@ -93,15 +103,13 @@ steps:
 # Deploy rstudio code
 # ##########################################################################
 # mag niet: step names must be unique within a job. Bijv name: tfinit_bootstrap 
-  - template: tfdeploy/azure-pipelines.yml
-    parameters:
-      TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
-      BRANCH_NAME: $(BRANCH_NAME)
-      TF_VAR_region: $(TF_VAR_region)
-      LIVEDIR: $(LIVEDIR)_${TF_VAR_rstudio_app_name}
+  # - template: tfdeploy/azure-pipelines.yml
+  #   parameters:
+  #     TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
+  #     BRANCH_NAME: $(BRANCH_NAME)
+  #     TF_VAR_region: $(TF_VAR_region)
+  #     LIVEDIR: $(LIVEDIR)_${TF_VAR_rstudio_app_name}
 
-stages:
-  - stage: rstudio
   - template: tfdeploy/azure-pipelines.yml
     parameters:
       TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
