@@ -286,7 +286,8 @@ steps:
         ls -la
         echo install with pip install checkov
         pip install checkov
-
+        echo run checkov with softfail  
+        # https://www.checkov.io/2.Basics/CLI%20Command%20Reference.html
         checkov -s -d .
         # RCLINT=$?
         # if [ $RCLINT != 0 ]
