@@ -23,11 +23,13 @@ steps:
       export TF_VAR_app_name=$1
       export TF_VAR_region=$2
       export BRANCH_NAME=$3
-
-      if [[ $LIVE_DIR = "live" ]]
+      echo start if loop to change to correct dir
+      if [[ $LIVEDIR = "live" ]]
       then
+        echo livedir var is live
         cd "${BRANCH_NAME}"/ || exit
       else
+        echo livedir var is not live
         cd "${BRANCH_NAME}"/${TF_VAR_app_name} || exit
       fi
       echo pwd is $PWD        
