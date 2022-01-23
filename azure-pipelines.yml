@@ -1,6 +1,3 @@
-# See https://onedrive.live.com/redir?resid=7AFAA849794F34C8%21134&page=Edit&wd=target%28Azure%20Devops.one%7Cae1f2799-c12d-4b89-93a3-07c08b68ee3c%2Fsimplify%7C713bc2d8-1480-4e5b-b9f2-051d9a9ce043%2F%29&wdorigin=703
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
 name: $(Date:yyyyMMdd)$(Rev:.r)
 
 parameters:
@@ -8,7 +5,6 @@ parameters:
     default: ''
   - name: vmImage
     default: ''
-  
 
 variables:
   - name: System.Debug
@@ -35,20 +31,23 @@ trigger:
 - stg
 - prd
 
-  
 # no PR triggers
 pr: none
 
 pool:
   vmImage: 'ubuntu-latest'
-##########
-# BACKENDS
-##########
+
+# You can organize pipeline jobs into stages. Stages are the major divisions in a pipeline: 
+#   "build this app", "run these tests", and "deploy to pre-production" are good examples of stages. 
+# They are logical boundaries in your pipeline where you can pause the pipeline and perform various checks.
+# Every pipeline has at least one stage even if you do not explicitly define it. 
+# You can also arrange stages into a dependency graph so that one stage runs before another one. 
+#There is a limit of 256 jobs for a stage.
 
 stages:
   - stage: backendbootstrap
 # ##########################################################################
-# Prepare bootstrap backend, with a ADO template ( https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references ) 
+# Prepare account , with a ADO template ( https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references ) 
 # ##########################################################################
     jobs:
       - job: backendbootstrap
@@ -70,11 +69,8 @@ stages:
             TF_VAR_region: $(TF_VAR_region)
             LIVEDIR: $(LIVEDIR)
 
-
-
-
 # ##########################################################################
-# Prepare rstudio backend
+# Prepare rstudio 
 # ##########################################################################
   - stage: backendrstudio
     # prepares files and folders for rstudio in this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
@@ -95,217 +91,3 @@ stages:
             BRANCH_NAME: $(BRANCH_NAME)
             TF_VAR_region: $(TF_VAR_region)
             LIVEDIR: $(LIVEDIR)_$(TF_VAR_rstudio_app_name)
-
-        
-#######################
-# END OF BACKENDS PREPS
-#######################
-
-
-
-##########
-# TERRAFORM BOOTSTRAP RESOURCES 
-##########
-  # - stage: bsresources
-  # # prepares files and folders for rstudio in this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
-  #   jobs:
-
-
-# ##########################################################################
-# Deploy rstudio code
-# ##########################################################################
-# mag niet: step names must be unique within a job. Bijv name: tfinit_bootstrap 
-  # - template: tfdeploy/azure-pipelines.yml
-  #   parameters:
-  #     TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
-  #     BRANCH_NAME: $(BRANCH_NAME)
-  #     TF_VAR_region: $(TF_VAR_region)
-  #     LIVEDIR: $(LIVEDIR)_${TF_VAR_rstudio_app_name}
-
-  #- stage: rstudioresources
-    # prepares files and folders for rstudio in this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
-# # ##########################################################################
-# # From here the terraform actions take place which deploys your resources
-# # ##########################################################################
-#   # Let's lint before doing anything further that consumes unneeded energy.
-#   - task: AWSShellScript@1
-#     inputs:
-#       awsCredentials: 'aws-AzureDevopsiamuser'
-#       regionName: $(TF_VAR_region)
-#       arguments: '$(TF_VAR_rstudio_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
-#       scriptType: 'inline'
-#       inlineScript: |
-#         echo args are $1 $2 $3
-#         export TF_VAR_rstudio_app_name=$1
-#         export TF_VAR_region=$2
-#         export BRANCH_NAME=$3
-#         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
-#         echo pwd is $PWD        
-#         echo "STARTING tflint for checking scripts in dir $BRANCH_NAME/${TF_VAR_rstudio_app_name} "
-#         ls -la
-#         echo
-#         ./tflint --init
-#         RCLINT=$?
-#         if [ $RCLINT != 0 ]
-#         then
-#           echo "tflint reports an error in $BRANCH_NAME/${TF_VAR_rstudio_app_name}"
-#           exit 1
-#         else
-#           echo "All is fine for tflint to continu for $BRANCH_NAME/${TF_VAR_rstudio_app_name}."
-#         fi
-#     name: tflint_rstudio
-
-
-#   # try checkov
-#   - task: AWSShellScript@1
-#     inputs:
-#       awsCredentials: 'aws-AzureDevopsiamuser'
-#       regionName: $(TF_VAR_region)
-#       arguments: '$(TF_VAR_rstudio_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
-#       scriptType: 'inline'
-#       inlineScript: |
-#         echo args are $1 $2 $3
-#         export TF_VAR_rstudio_app_name=$1
-#         export TF_VAR_region=$2
-#         export BRANCH_NAME=$3
-#         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
-#         echo pwd is $PWD        
-#         echo "STARTING checkov for checking scripts in dir $BRANCH_NAME/${TF_VAR_rstudio_app_name} "
-#         ls -la
-#         echo install with pip install checkov
-#         pip install checkov
-#         echo run checkov with softfail  
-#         # https://www.checkov.io/2.Basics/CLI%20Command%20Reference.html
-#         checkov -s -d .
-#         # RCLINT=$?
-#         # if [ $RCLINT != 0 ]
-#         # then
-#         #   echo "tflint reports an error in $BRANCH_NAME/${TF_VAR_rstudio_app_name}"
-#         #   exit 1
-#         # else
-#         #   echo "All is fine for tflint to continu for $BRANCH_NAME/${TF_VAR_rstudio_app_name}."
-#         # fi
-#     name: checkov_rstudio
-
-#   # terraform init rstudio
-#   - task: AWSShellScript@1
-#     inputs:
-#       awsCredentials: 'aws-AzureDevopsiamuser'
-#       regionName: $(TF_VAR_region)
-#       arguments: '$(TF_VAR_rstudio_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
-#       scriptType: 'inline'
-#       inlineScript: |
-#         echo args are $1 $2 $3
-#         export TF_VAR_rstudio_app_name=$1
-#         export TF_VAR_region=$2
-#         export BRANCH_NAME=$3
-#         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
-#         echo pwd is  $PWD        
-#         echo "STARTING TERRAFORM INIT"
-#         TF_IN_AUTOMATION=yes
-#         $TERRAFORM init
-#     name: tfinit_rstudio
-
-#   # teraform plan rstudio
-#   - task: AWSShellScript@1
-#     inputs:
-#       awsCredentials: 'aws-AzureDevopsiamuser'
-#       regionName: $(TF_VAR_region)
-#       arguments: '$(TF_VAR_rstudio_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
-#       scriptType: 'inline'
-#       inlineScript: |
-#         echo args are $1 $2 $3
-#         export TF_VAR_rstudio_app_name=$1
-#         # in variables.tf is gives the variable app_name so we have to define it here
-#         export TF_VAR_app_name=$TF_VAR_rstudio_app_name
-#         export TF_VAR_region=$2
-#         export BRANCH_NAME=$3
-#         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
-#         pwd
-
-#         echo show terraform resources
-#         $TERRAFORM state list
-#         echo
-
-#         echo "STARTING TERRAFORM PLAN"
-#         OUTPUT=$($TERRAFORM plan -out="./rstudio_out_plan_file" -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
-#               OUT=$?
-#               echo "##vso[task.setvariable variable=tfplan_rstudio_exitcode;isOutput=true]$OUT"
-#               echo "the terraform plan exitcode is $OUT"
-#               if [ $OUT -eq 0 ];then
-#                   echo "No changes. Infrastructure is up-to-date!"
-#               elif [ $OUT -eq 1 ];then
-#                   echo "Terraform planned has failed!"
-#                   exit 1
-#               elif [ $OUT -eq 2 ];then
-#                   echo "Changes have been noticed!"
-#                   echo Current dir is 
-#                   pwd
-#                   echo
-#                   echo "Showing the plan file:"
-
-#                   $TERRAFORM show ./rstudio_out_plan_file
-#               else
-#                   echo "Terraform planned has failed!"
-#                   exit 1
-#               fi
-#     name: tfplan_rstudio
-
-#   - bash: |  
-#       echo  SHow IN SAME JOB the output variable rstudio tfplan_exitcode  is "$(tfplan_rstudio.tfplan_rstudio_exitcode)"   
-#     displayName: Show rstudio terraform_plan_exitcode in same job
-
-#   - bash: |  
-#       echo  SHow files
-#       pwd
-#       echo 
-#       echo ls -ltR
-#       echo
-#       echo show tree
-#       tree
-#     displayName: Show files _rstudio
-
-#     # You can organize pipeline jobs into stages. Stages are the major divisions in a pipeline: 
-#     #   "build this app", "run these tests", and "deploy to pre-production" are good examples of stages. 
-#     # They are logical boundaries in your pipeline where you can pause the pipeline and perform various checks.
-#     # Every pipeline has at least one stage even if you do not explicitly define it. 
-#     # You can also arrange stages into a dependency graph so that one stage runs before another one. There is a limit of 256 jobs for a stage.
-
-
-#   - task: AWSShellScript@1
-#     inputs:
-#       awsCredentials: 'aws-AzureDevopsiamuser'
-#       regionName: $(TF_VAR_region)
-#       arguments: '$(TF_VAR_rstudio_app_name) $(TF_VAR_region) $(BRANCH_NAME)'
-#       scriptType: 'inline'
-#       inlineScript: |
-#         #  You can write your script inline here
-#         echo args are $1 $2 $3
-#         export TF_VAR_rstudio_app_name=$1
-#         export TF_VAR_region=$2
-#         export BRANCH_NAME=$3
-#         echo  SHow output variable rstudio  tfplan_rstudio_exitcode  is "$(tfplan_rstudio.tfplan_rstudio_exitcode)"
-#         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
-#         echo pwd is now
-#         pwd
-#         echo and files are
-#         ls -l 
-#         TF_IN_AUTOMATION=yes
-#               if [ "$(tfplan_rstudio.tfplan_rstudio_exitcode)" -eq 0 ];then
-#                   echo "Terraform apply will not run because terraform plan has no changes."
-#               elif [ "$(tfplan_rstudio.tfplan_rstudio_exitcode)" -eq 1 ];then
-#                   echo "Terraform apply will not run because terraform plan has failed!"
-#                   exit 1
-#               elif [ "$(tfplan_rstudio.tfplan_rstudio_exitcode)" -eq 2 ];then
-#                   echo "Changes have been noticed by terraform plan! I will show you: "
-#                   pwd
-#                   ls -l
-#                   $TERRAFORM show ./rstudio_out_plan_file
-#                   echo
-#                   echo "Now apply will run:"
-#                   $TERRAFORM apply  -input=false ./rstudio_out_plan_file
-#               else
-#                   echo "Terraform apply has failed! THis is else."
-#                   exit 1
-#               fi
-#     name: tfapply_rstudio
