@@ -1,0 +1,161 @@
+#cloud-config 
+# Advice: use validate_yaml.py to check your cloudinit template before deploying ( athlon-ccoe-bi/bi_nonprod/dev/rstudio/scripts/validate_yaml.py )
+# update
+repo_update: true
+repo_upgrade: all
+
+
+  # validation valt hierover: dat streepje
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSgc99vXj6YdBWIUogwlrJEgGNRHPAdL19koYvpFMYvNOv+kgj0nvoteXfSYd+tZC8pC3+wLJd0UIqOzuqj+gBnFqxa2dmlQ+THZMFuMh0oLSSnzvMWNqq0r4V4qc1ntv0CZFEIYkd3hai8Brj7Zz0iNqmzFfo5U0E9GrgisoBbDMl3k0UU9w6PnC/lKWWTPgNKKYun4fc10fsg0IWxAmKLg2NXGAG06LCMmmt/EAkhGY79mOC5xqnAkwjC8B/4Vtgtu3jrwB2cWhpmaHzfg5ZQ/BaoIVxSBSsSc3UZi6la+uzdwT7CktDJZbZxlQ3ulPLUthI8YgeBIi7TI9w2dzv 854728192281-bi-nonprod
+
+  # Add groups to the system 
+# Adds the athlonmgmt group with members 'root' and 'sys' 
+# and the empty group hashicorp. 
+
+groups: 
+  - athlonmgmt: [root] 
+  - hashicorp 
+  - foobar
+
+# Add users to the system. Users are added after groups are added. 
+users: 
+  - default 
+  - name: terraform 
+    gecos: terraform 
+    shell: /bin/bash 
+    primary_group: hashicorp 
+    sudo: ALL=(ALL) NOPASSWD:ALL 
+    groups: users, admin 
+    lock_passwd: false 
+    ssh_authorized_keys: 
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSgc99vXj6YdBWIUogwlrJEgGNRHPAdL19koYvpFMYvNOv+kgj0nvoteXfSYd+tZC8pC3+wLJd0UIqOzuqj+gBnFqxa2dmlQ+THZMFuMh0oLSSnzvMWNqq0r4V4qc1ntv0CZFEIYkd3hai8Brj7Zz0iNqmzFfo5U0E9GrgisoBbDMl3k0UU9w6PnC/lKWWTPgNKKYun4fc10fsg0IWxAmKLg2NXGAG06LCMmmt/EAkhGY79mOC5xqnAkwjC8B/4Vtgtu3jrwB2cWhpmaHzfg5ZQ/BaoIVxSBSsSc3UZi6la+uzdwT7CktDJZbZxlQ3ulPLUthI8YgeBIi7TI9w2dzv 854728192281-bi-nonprod
+  - name: foobar 
+    gecos: Foo B. Bar 
+    primary_group: foobar 
+    groups: users 
+    #selinux_user: staff_u   # -Z requires SELinux enabled kernel
+    expiredate: '2032-09-01' 
+    ssh_import_id: foobar 
+    lock_passwd: false 
+    passwd: $6$rounds=4096$ci76sr.J$lrAn20cwpQPx5GA.V3Jl5mM7n5mZDlvb44pqMInOwQnPuE41PiFyjJB1N5Z38MCjLUCiucS6EGGkSIPKAZRTk.
+  # - name: ec2-user
+  #   ssh_authorized_keys: 
+  #     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSgc99vXj6YdBWIUogwlrJEgGNRHPAdL19koYvpFMYvNOv+kgj0nvoteXfSYd+tZC8pC3+wLJd0UIqOzuqj+gBnFqxa2dmlQ+THZMFuMh0oLSSnzvMWNqq0r4V4qc1ntv0CZFEIYkd3hai8Brj7Zz0iNqmzFfo5U0E9GrgisoBbDMl3k0UU9w6PnC/lKWWTPgNKKYun4fc10fsg0IWxAmKLg2NXGAG06LCMmmt/EAkhGY79mOC5xqnAkwjC8B/4Vtgtu3jrwB2cWhpmaHzfg5ZQ/BaoIVxSBSsSc3UZi6la+uzdwT7CktDJZbZxlQ3ulPLUthI8YgeBIi7TI9w2dzv 854728192281-bi-nonprod
+
+#ssh_pwauth: True ## This line enables ssh password authentication
+
+# change password of ec2-user
+chpasswd:
+    list:
+        - ec2-user:$6$rounds=4096$ci76sr.J$lrAn20cwpQPx5GA.V3Jl5mM7n5mZDlvb44pqMInOwQnPuE41PiFyjJB1N5Z38MCjLUCiucS6EGGkSIPKAZRTk.
+    expire: False
+
+# Downloads
+packages: 
+  - elinks
+  - amazon-cloudwatch-agent
+  - amazon-efs-utils
+
+  #https://grantorchard.com/dynamic-cloudinit-content-with-terraform-file-templates/
+write_files:
+ - content: |
+    # My efs
+    ${efs_hostname}
+    echo ${efs_hostname}
+   path: /home/ec2-user/README_EFS.md
+   permissions: '0766'
+    #owner: ec2-user:ec2-user  #OSError("Unknown user or group: 'getpwnam(): name not found: ec2-user'",))
+ - content: |
+      #!/bin/sh
+      version=$(rpm -q --qf '%%{version}' system-release)
+      cat << EOF
+
+      This system belongs to 
+
+        ##     #####  #    #  #        ####   #    #
+       #  #      #    #    #  #       #    #  ##   #
+      #    #     #    ######  #       #    #  # #  #
+      ######     #    #    #  #       #    #  #  # #
+      #    #     #    #    #  #       #    #  #   ##
+      #    #     #    #    #  ######   ####   #    #
+
+      https://aws.amazon.com/amazon-linux-ami/$version-release-notes/
+
+      Workbench
+      =======
+      EFS DNS name is ${efs_hostname}
+      volume id extra disk is ${volume_id}
+      lsblk_name is ${lsblk_name}
+      ebs_device_name is ${ebs_device_name}
+
+      RDS database
+      ============
+      RDS endpoint is ${rdsendpoint}
+      Database name is ${bianalyticsdatabasename}
+      Example usage:
+      psql -h ${rdsendpoint} -U root -d ${bianalyticsdatabasename}
+      password for root is in aws secrets manager.
+
+      Kubernetes
+      ==========
+      kubectl is in /usr/local/bin
+      The KUBECONFIG variable is allready set in your shell
+      If not then set it like this:
+      export KUBECONFIG=/app/rstudio/.kube/config
+      
+      EOF
+   owner: root:root
+   path: /etc/update-motd.d/50-banner
+   permissions: '0766'
+# mounts:
+#     - [ /dev/sdb, /app/rstudio/, xfs,  defaults,nofail,  0,  2]  # werktniet: cc_mounts.py[DEBUG]: changed /dev/sdb => None
+
+    # bootcmd doet het niet.
+# bootcmd:
+#   - mkdir -p /app/rstudio
+
+runcmd: 
+    - echo Uninstall aws cli vesion 1
+    - rm -f $(which aws)
+    - echo Install aws version 2
+    - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+    - cd /tmp
+    - unzip /tmp/awscliv2.zip 
+    - /tmp/aws/install 
+    - rm -rf /tmp/aws
+    - rm -rf /tmp/awscliv2.zip
+    - /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c ssm:Cloudwatch-LinuxClientConfigEventLog -s
+    - echo mount efs
+    - mkdir -p ${efs_mountpoint}
+    - mount -t efs -o tls ${efs_hostname} ${efs_mountpoint}
+    - echo efs_hostname is  ${efs_hostname} and  efs_mountpoint is ${efs_mountpoint}
+    - echo "${efs_hostname}:/ ${efs_mountpoint} efs _netdev,noresvport,tls,iam,nofail  0 0"  | tee -a /etc/fstab
+    - echo Creating mountpoint and mount disk
+    - mkdir -p ${ebs_mountpoint}
+    - mount ${ebs_device_name} ${ebs_mountpoint}
+    - uuid=$(sudo  blkid ${ebs_device_name} | sed -n 's/.*UUID=\"\([^\"]*\)\".*/\1/p')
+    - echo "UUID=$uuid ${ebs_mountpoint}   xfs defaults,nofail  0  2" | tee -a /etc/fstab 
+    - curl -L "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl
+    - chmod +x /usr/local/bin/kubectl
+    - aws eks --region eu-central-1  update-kubeconfig --name bi-dev --kubeconfig ${ebs_mountpoint}/.kube/config
+    - chown -R ec2-user.ec2-user /home/ec2-user
+    - echo "export KUBECONFIG=${ebs_mountpoint}/.kube/config" >> /etc/profile.d/sh.local
+    - echo Set timezone to Amsterdam
+    - timedatectl set-timezone Europe/Amsterdam
+    - echo Show time and timezone
+    - timedatectl
+    
+    #- echo "export KUBECONFIG=/app/rstudio/.kube/config" >> /etc/profile.d/sh.local
+
+    # dit werkt:
+    # - uuid=$(sudo  blkid /dev/sdb | sed -n 's/.*UUID=\"\([^\"]*\)\".*/\1/p')
+    # - echo "UUID=$uuid /app/rstudio   xfs defaults,nofail  0  2" | tee -a /etc/fstab 
+
+
+    ##- echo "UUID=$(lsblk -o +UUID /dev/sdb -n | awk '{ print $7}' ) /app/rstudio   xfs defaults,nofail  0  2" | tee -a /etc/fstab 
+    
+#We specify 0 to prevent the file system from being dumped, and we specify 2 to indicate that it is a non-root device.
+
+# extra output from cloud-config:
+output : { all : '| tee -a /var/log/cloud-init-output.log' } 

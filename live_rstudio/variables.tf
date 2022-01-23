@@ -1,11 +1,11 @@
 ### Dynamic Values ------------------------------
 ### ---------------------------------------------
-variable "cidr_ab" {
+variable "ec2_type" {
   type = map
   default = {
-    dev = "10.1"
-    stg = "10.2"
-    prd = "10.3"
+    dev = "t3a.nano"
+    stg = "t3a.micro"
+    prd = "t3a.small"
   }
 }
 ### ---------------------------------------------
@@ -15,16 +15,8 @@ variable "cidr_ab" {
 ### ---------------------------------------------
 locals {
   prefix   = "${var.app_name}-${var.environment}"
-  vpc_cidr = "${lookup(var.cidr_ab, var.environment)}.0.0/16"
-  public_subnets = [
-    "${lookup(var.cidr_ab, var.environment)}.1.0/24",
-    "${lookup(var.cidr_ab, var.environment)}.2.0/24",
-  ]
-  private_subnets = [
-    "${lookup(var.cidr_ab, var.environment)}.10.0/24",
-    "${lookup(var.cidr_ab, var.environment)}.20.0/24",
-  ]
-  availability_zones = ["${var.region}a", "${var.region}b"]
+  ec2_type = "${lookup(var.ec2_type, var.environment)}"
+  
 
   tags = {
     "Environment" : var.environment,

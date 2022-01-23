@@ -43,8 +43,8 @@ steps:
 #     #useChangeSet: true
 # #     changeSetName: 'csname'
 
-# Here the backend ( S3  bucket for terraform .state file and dynamodb table ) will be created 
-# this works: use the cloudformation parameter substitution with inline parameters:
+# Here the backend ( S3  bucket for terraform .state file and dynamodb table ) will be created.
+# This works: use the cloudformation parameter substitution with inline parameters:
 - task: CloudFormationCreateOrUpdateStack@1
   inputs:
     awsCredentials: 'aws-AzureDevopsiamuser'

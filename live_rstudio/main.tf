@@ -28,3 +28,36 @@ resource "aws_security_group" "zomaar_rstudio_SG" {
     Stage    = var.environment
   }
 }
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
+module "ec2_instance_rstudio" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 3.0"
+
+  name = "single-instance_rstudio_${var.environment}"
+
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.ec2_type
+  monitoring             = true
+  vpc_security_group_ids = [aws_security_group.zomaar_rstudio_SG]
+
+  tags = {
+    Terraform   = "true"
+    Environment = var.environment
+  }
+}

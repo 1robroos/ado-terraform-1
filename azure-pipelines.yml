@@ -41,13 +41,16 @@ pr: none
 
 pool:
   vmImage: 'ubuntu-latest'
-
+##########
+# BACKENDS
+##########
 
 # ##########################################################################
-# Prepare bootstrap backend
+# Prepare bootstrap backend, with a ADO template ( https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references ) 
 # ##########################################################################
 steps:
-  # prepares files and folders for this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
+  # prepares files and folders for this stage and 
+  # prepares aws S3 buckets for terraform state file with Cloudformation.
   - template: preps/azure-pipelines.yml
     parameters:
       TF_VAR_app_name: $(TF_VAR_app_name)
@@ -55,16 +58,6 @@ steps:
       TF_VAR_region: $(TF_VAR_region)
       LIVEDIR: $(LIVEDIR)
 
-
-# # ##########################################################################
-# # Prepare rstudio backend
-# # ##########################################################################
-#   # prepares files and folders for this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
-#   - template: preps_rstudio/azure-pipelines.yml
-#     parameters:
-#       TF_VAR_rstudio_app_name: $(TF_VAR_rstudio_app_name)
-#       BRANCH_NAME: $(BRANCH_NAME)
-#       TF_VAR_region: $(TF_VAR_region)
 
 # ##########################################################################
 # Prepare rstudio backend
@@ -76,6 +69,16 @@ steps:
       BRANCH_NAME: $(BRANCH_NAME)
       TF_VAR_region: $(TF_VAR_region)
       LIVEDIR: $(LIVEDIR)_$(TF_VAR_rstudio_app_name)  # where the rstudio source terraform code lives. live_rstudio
+
+#######################
+# END OF BACKENDS PREPS
+#######################
+
+
+
+##########
+# TERRAFORM BOOTSTAP RESOURCES 
+##########
 
 # ##########################################################################
 # From here the terraform actions take place which deploys your resources
@@ -151,7 +154,9 @@ steps:
         pwd
         cat backend.tf
         echo
-
+        echo show terraform resources
+        $TERRAFORM state list
+        echo
         echo "STARTING TERRAFORM PLAN"
         OUTPUT=$($TERRAFORM plan -out="./out_plan_file" -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
               OUT=$?
@@ -297,6 +302,11 @@ steps:
         export TF_VAR_region=$2
         export BRANCH_NAME=$3
         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
+
+        echo show terraform resources
+        $TERRAFORM state list
+        echo
+        
         echo "STARTING TERRAFORM PLAN"
         OUTPUT=$($TERRAFORM plan -out="./rstudio_out_plan_file" -var environment="${BRANCH_NAME}" -input=false -detailed-exitcode)
               OUT=$?
