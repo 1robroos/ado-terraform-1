@@ -91,7 +91,6 @@ stages:
             TF_VAR_region: $(TF_VAR_region)
             LIVEDIR: $(LIVEDIR)_$(TF_VAR_rstudio_app_name)  # where the rstudio source terraform code lives. live_rstudio
 
-    jobs:
       - job: rstudioresources
         displayName: rstudioresources
         steps: 
