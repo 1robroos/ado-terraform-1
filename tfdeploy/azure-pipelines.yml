@@ -37,7 +37,7 @@ steps:
       else
         echo "All is fine for tflint to continu."
       fi
-    displayname: tflint_bootstrap
+  name: tflint_bootstrap
 
 
 # terraform init
@@ -61,7 +61,7 @@ steps:
       echo "STARTING TERRAFORM INIT"
       TF_IN_AUTOMATION=yes
       $TERRAFORM init
-    displayname: tfinit_bootstrap
+  name: tfinit_bootstrap
 
 # teraform plan
 - task: AWSShellScript@1
@@ -102,7 +102,7 @@ steps:
                 echo "Terraform planned has failed!"
                 exit 1
             fi
-    displayname: tfplan_bootstrap
+  name: tfplan_bootstrap
 
 - bash: |  
     echo  SHow IN SAME JOB the output variable terraform_plan_exitcode  is "$(tfplan_bootstrap.terraform_plan_exitcode)"   
@@ -155,4 +155,4 @@ steps:
                 echo "Terraform apply has failed! THis is else."
                 exit 1
             fi
-    displayname: tfapply_bootstrap
+  name: tfapply_bootstrap

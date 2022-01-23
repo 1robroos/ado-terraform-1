@@ -92,7 +92,7 @@ steps:
 # ##########################################################################
 # Deploy rstudio code
 # ##########################################################################
-
+# mag niet: step names must be unique within a job. Bijv name: tfinit_bootstrap 
   - template: tfdeploy/azure-pipelines.yml
     parameters:
       TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
@@ -100,7 +100,14 @@ steps:
       TF_VAR_region: $(TF_VAR_region)
       LIVEDIR: $(LIVEDIR)_${TF_VAR_rstudio_app_name}
 
-
+stages:
+  - stage: rstudio
+  - template: tfdeploy/azure-pipelines.yml
+    parameters:
+      TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
+      BRANCH_NAME: $(BRANCH_NAME)
+      TF_VAR_region: $(TF_VAR_region)
+      LIVEDIR: $(LIVEDIR)_${TF_VAR_rstudio_app_name}
 
 # # ##########################################################################
 # # From here the terraform actions take place which deploys your resources
