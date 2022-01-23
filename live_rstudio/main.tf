@@ -45,7 +45,7 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-module "ec2_instance_rstudio" {
+module "ec2_instance_rstudio_2" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 3.0"
 
