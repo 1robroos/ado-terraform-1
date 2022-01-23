@@ -37,7 +37,7 @@ steps:
       else
         echo "All is fine for tflint to continu."
       fi
-  displayname: tflint_bootstrap
+    displayname: tflint_bootstrap
 
 
 # terraform init
