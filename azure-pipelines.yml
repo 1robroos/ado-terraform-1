@@ -392,6 +392,10 @@ steps:
       scriptType: 'inline'
       inlineScript: |
         #  You can write your script inline here
+        echo args are $1 $2 $3
+        export TF_VAR_rstudio_app_name=$1
+        export TF_VAR_region=$2
+        export BRANCH_NAME=$3
         echo  SHow output variable rstudio  tfplan_rstudio_exitcode  is "$(tfplan_rstudio.tfplan_rstudio_exitcode)"
         cd "${BRANCH_NAME}/${TF_VAR_rstudio_app_name}"/ || exit
         echo pwd is now
