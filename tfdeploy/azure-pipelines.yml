@@ -190,8 +190,9 @@ steps:
       echo
       if [[ $LIVEDIR = "live" ]]
       then
-        echo livedir var is live
-        cd "${BRANCH_NAME}"/ || exit
+        echo livedir var is live en BRANCH_NAME -s $BRANCH_NAME
+        
+        cd $BRANCH_NAME || exit
       else
         echo livedir var is not live
         echo var TF_VAR_app_name=$TF_VAR_app_name
@@ -200,7 +201,7 @@ steps:
       fi
       echo pwd is $PWD        
 
-      cd "${BRANCH_NAME}"/ || exit  
+      #cd "${BRANCH_NAME}"/ || exit  
       echo pwd is  $PWD   
       echo show backend file     
       pwd
