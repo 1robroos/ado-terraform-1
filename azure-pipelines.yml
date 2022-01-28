@@ -84,13 +84,28 @@ stages:
       #     inputs:
       #       notifyUsers: '1robroos@gmail.com'
       #       instructions: 'Validate to run Rstudio deployment'    
+ 
+      - job: waitForValidation
+        displayName: Wait for external validation  
+        pool: server    
+        timeoutInMinutes: 4320 # job times out in 3 days
+        steps:   
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              test@test.com
+              1robroos@gmail.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'resume'
+
       - job: backendrstudio
         displayName: backendrstudio
         steps: 
-        - task: ManualIntervention@8
-          inputs:
-            instructions: 'validate'
-            emailRecipients: '1robroos@gmail.com'
+        # - task: ManualIntervention@8
+        #   inputs:
+        #     instructions: 'validate'
+        #     emailRecipients: '1robroos@gmail.com'
         - template: preps/azure-pipelines.yml
           parameters:
             TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
