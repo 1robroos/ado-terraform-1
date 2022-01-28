@@ -77,17 +77,20 @@ stages:
   - stage: backendrstudio
     # prepares files and folders for rstudio in this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
     jobs:
-      - job: WaitForRstudioValidation
-        displayName: WaitForRstudioValidation
-        steps: 
-        - task: ManualValidation@0
-          inputs:
-            notifyUsers: '1robroos@gmail.com'
-            instructions: 'Validate to run Rstudio deployment'
-            
+      # - job: WaitForRstudioValidation
+      #   displayName: WaitForRstudioValidation
+      #   steps: 
+      #   - task: ManualValidation@0
+      #     inputs:
+      #       notifyUsers: '1robroos@gmail.com'
+      #       instructions: 'Validate to run Rstudio deployment'    
       - job: backendrstudio
         displayName: backendrstudio
         steps: 
+        - task: ManualIntervention@8
+          inputs:
+            instructions: 'validate'
+            emailRecipients: '1robroos@gmail.com'
         - template: preps/azure-pipelines.yml
           parameters:
             TF_VAR_app_name: $(TF_VAR_rstudio_app_name)
