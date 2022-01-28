@@ -44,6 +44,8 @@ pool:
 # You can also arrange stages into a dependency graph so that one stage runs before another one. 
 #There is a limit of 256 jobs for a stage.
 
+
+# I need stages because callng the same backend files when all is in one stage will result in an error. Because step names have to be unique
 stages:
   - stage: backendbootstrap
 # ##########################################################################
@@ -75,6 +77,14 @@ stages:
   - stage: backendrstudio
     # prepares files and folders for rstudio in this stage and prepares aws S3 buckets for terraform state file with Cloudformation.
     jobs:
+      - job: WaitForRstudioValidation
+        displayName: WaitForRstudioValidation
+        steps: 
+        - task: ManualValidation@0
+          inputs:
+            notifyUsers: '1robroos@gmail.com'
+            instructions: 'Validate to run Rstudio deployment'
+            
       - job: backendrstudio
         displayName: backendrstudio
         steps: 

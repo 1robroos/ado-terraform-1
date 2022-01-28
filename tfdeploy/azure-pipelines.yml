@@ -225,7 +225,7 @@ steps:
                 $TERRAFORM show ./out_plan_file
                 echo
                 echo "Now apply will run:"
-                #$TERRAFORM apply  -input=false ./out_plan_file
+                $TERRAFORM apply  -input=false ./out_plan_file
             else
                 echo "Terraform apply has failed! THis is else."
                 exit 1
